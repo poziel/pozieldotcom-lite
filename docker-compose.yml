@@ -6,32 +6,9 @@ services:
     container_name: poziel-landing
     restart: unless-stopped
     ports:
-      - "8081:80"  # Expose on port 8081 (adjust if needed)
+      - "8585:80"  # Internal port for NPM to forward to
     networks:
       - proxy
-    labels:
-      # These labels are examples - adjust domains as needed
-      - "traefik.enable=true"
-      
-      # poziel.com
-      - "traefik.http.routers.poziel-com.rule=Host(`poziel.com`) || Host(`www.poziel.com`)"
-      - "traefik.http.routers.poziel-com.entrypoints=websecure"
-      - "traefik.http.routers.poziel-com.tls.certresolver=letsencrypt"
-      
-      # poziel.dev
-      - "traefik.http.routers.poziel-dev.rule=Host(`poziel.dev`) || Host(`www.poziel.dev`)"
-      - "traefik.http.routers.poziel-dev.entrypoints=websecure"
-      - "traefik.http.routers.poziel-dev.tls.certresolver=letsencrypt"
-      
-      # poziel.tv
-      - "traefik.http.routers.poziel-tv.rule=Host(`poziel.tv`) || Host(`www.poziel.tv`)"
-      - "traefik.http.routers.poziel-tv.entrypoints=websecure"
-      - "traefik.http.routers.poziel-tv.tls.certresolver=letsencrypt"
-      
-      # poziel.gg (future)
-      - "traefik.http.routers.poziel-gg.rule=Host(`poziel.gg`) || Host(`www.poziel.gg`)"
-      - "traefik.http.routers.poziel-gg.entrypoints=websecure"
-      - "traefik.http.routers.poziel-gg.tls.certresolver=letsencrypt"
 
 networks:
   proxy:

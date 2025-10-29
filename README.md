@@ -41,22 +41,28 @@ docker-compose up -d
 docker logs -f poziel-landing
 ```
 
-### 4. Configure NPM or Traefik
+### 4. Configure NPM
 
-**Option A: Nginx Proxy Manager**
+In Nginx Proxy Manager, create **one proxy host per domain**:
 
-Create proxy hosts for each domain:
-- **Domain**: `poziel.com` (and `www.poziel.com`)
-- **Forward to**: `poziel-landing:80`
-- **SSL**: Enable Let's Encrypt
+**For poziel.com:**
+- **Domain Names**: `poziel.com`, `www.poziel.com`
+- **Scheme**: `http`
+- **Forward Hostname/IP**: `poziel-landing`
+- **Forward Port**: `80`
+- **Block Common Exploits**: ✅
+- **Websockets Support**: ❌ (not needed)
+- **SSL Tab**: 
+  - ✅ Force SSL
+  - ✅ HTTP/2 Support
+  - ✅ Request a new SSL Certificate (Let's Encrypt)
+  - Email: `your-email@poziel.com`
+  - ✅ Agree to Let's Encrypt ToS
 
-Repeat for `poziel.dev`, `poziel.tv`, `poziel.gg`.
-
-**Option B: Traefik** (if you switch later)
-
-The `docker-compose.yml` already includes Traefik labels. Just ensure:
-- The `proxy` network exists: `docker network create proxy`
-- Traefik is configured with Let's Encrypt resolver
+**Repeat for:**
+- `poziel.dev` + `www.poziel.dev`
+- `poziel.tv` + `www.poziel.tv`
+- `poziel.gg` + `www.poziel.gg` (when you buy the domain)
 
 ### 5. Update DNS
 
