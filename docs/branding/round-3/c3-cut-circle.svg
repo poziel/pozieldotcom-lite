@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-shade)"/>
+</svg>

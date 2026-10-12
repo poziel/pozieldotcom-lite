@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C1 — Refined spacing</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#eeede7;color:#252628;font:14px/1.5 "Segoe UI",Arial,sans-serif}
+    main{max-width:880px;margin:auto;padding:36px}
+    .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#656566}
+    h1{font-size:30px;letter-spacing:-.04em;line-height:1.2;margin:10px 0 28px}
+    .comparison{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #ceccc5}
+    section{min-width:0;padding:22px 24px 0}
+    section+section{border-left:1px solid #ceccc5}
+    h2{font-size:15px;font-weight:500;margin:0}
+    .large{display:block;width:240px;max-width:100%;aspect-ratio:1;margin:20px auto}
+    .sizes{display:flex;align-items:center;justify-content:center;gap:32px;padding:18px 8px;border-top:1px solid #ceccc5;min-height:84px}
+    .dark{background:#18191b;border-color:transparent;margin:0 -24px;padding:22px}
+    .sizes img{display:block}
+    footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:24px;font-size:12px;color:#656566}
+    a{color:inherit;text-underline-offset:3px}
+    a:focus-visible{outline:2px solid #925323;outline-offset:4px}
+    @media(hover:hover){a:hover{color:#252628}}
+    @media(max-width:600px){main{padding:24px 16px}section{padding:16px 12px 0}.large{width:180px}.sizes{gap:16px}.dark{margin:0 -12px;padding:18px 8px}h1{font-size:26px}}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Pøziel / C1 Open orbit</div>
+    <h1>A little more breathing room.</h1>
+    <div class="comparison">
+      <section aria-label="Original spacing">
+        <h2>Before</h2>
+        <img class="large" src="c1-original.svg" alt="C1 with the original arc spacing">
+        <div class="sizes" aria-label="Original at 16, 24 and 48 pixels"><img src="c1-original.svg" width="16" height="16" alt=""><img src="c1-original.svg" width="24" height="24" alt=""><img src="c1-original.svg" width="48" height="48" alt=""></div>
+        <div class="sizes dark" aria-hidden="true"><img src="c1-original.svg" width="16" height="16" alt=""><img src="c1-original.svg" width="24" height="24" alt=""><img src="c1-original.svg" width="48" height="48" alt=""></div>
+      </section>
+      <section aria-label="Wider spacing">
+        <h2>More space between the arcs</h2>
+        <img class="large" src="../round-3/c1-open-orbit.svg" alt="C1 with slightly wider openings between its arcs">
+        <div class="sizes" aria-label="Updated at 16, 24 and 48 pixels"><img src="../round-3/c1-open-orbit.svg" width="16" height="16" alt=""><img src="../round-3/c1-open-orbit.svg" width="24" height="24" alt=""><img src="../round-3/c1-open-orbit.svg" width="48" height="48" alt=""></div>
+        <div class="sizes dark" aria-hidden="true"><img src="../round-3/c1-open-orbit.svg" width="16" height="16" alt=""><img src="../round-3/c1-open-orbit.svg" width="24" height="24" alt=""><img src="../round-3/c1-open-orbit.svg" width="48" height="48" alt=""></div>
+      </section>
+    </div>
+    <footer><span>Same circle, diamond, and colors. Native SVG.</span><a href="../site-preview/">See it on the website</a><a href="../round-3/c1-open-orbit.svg" download>Download SVG</a></footer>
+  </main>
+</body>
+</html>

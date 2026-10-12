@@ -20,3 +20,8 @@ logs/
 # Temporary files
 tmp/
 temp/
+node_modules/
+dist/
+output/
+.playwright-cli/
+.npm-cache/

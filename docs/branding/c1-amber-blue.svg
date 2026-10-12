@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="amber" x1="24" y1="16" x2="106" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eebd78"/>
+      <stop offset="1" stop-color="#cd904b"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="24" y1="16" x2="106" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#89a9d0"/>
+      <stop offset="1" stop-color="#4d69a2"/>
+    </linearGradient>
+    <linearGradient id="diamond" x1="48" y1="44" x2="80" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eebd78"/>
+      <stop offset="1" stop-color="#cd904b"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="64" y1="24" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18191b" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#18191b" stop-opacity=".04"/>
+    </linearGradient>
+  </defs>
+  <path d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#amber)"/>
+  <path d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#blue)"/>
+  <path d="M64 43 85 64 64 85 43 64Z" fill="url(#diamond)"/>
+  <path d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#fold)"/>
+  <path d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#fold)"/>
+  <path d="M43 64H85L64 85Z" fill="url(#fold)"/>
+</svg>

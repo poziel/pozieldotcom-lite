@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C1 or C3 — Pøziel website preview</title>
+  <link id="preview-favicon" rel="icon" type="image/svg+xml" href="../round-3/c1-open-orbit.svg">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#eeede7;color:#252628;font:14px/1.5 "Segoe UI",Arial,sans-serif}
+    main{max-width:1320px;padding:28px 24px 40px;margin:auto}
+    .topline{font-size:11px;letter-spacing:.1em;color:#656566;text-transform:uppercase}
+    h1{font-size:30px;letter-spacing:-.04em;line-height:1.2;margin:12px 0 10px}
+    .intro{color:#656566;margin:0}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;margin:24px 0}
+    .options{display:flex;flex-wrap:wrap;gap:8px}
+    button{display:flex;align-items:center;gap:10px;background:transparent;color:inherit;border:1px solid #c1bfb8;border-radius:6px;padding:9px 14px;cursor:pointer;font:inherit}
+    button img{width:32px;height:32px}
+    button[aria-pressed="true"]{background:#fffdf6;border-color:#252628;box-shadow:inset 0 0 0 1px #252628}
+    button:focus-visible,a:focus-visible{outline:2px solid #925323;outline-offset:4px}
+    .devices button{font-size:12px;padding:8px 12px}
+    .browser{max-width:100%;margin:auto;background:#18191b;border:1px solid #353638;border-radius:12px;overflow:hidden}
+    .browser[data-device="mobile"]{width:392px}
+    .tabbar{display:flex;align-items:center;gap:8px;padding:11px 16px;background:#26272a;color:#eeede7;font-size:11px}
+    .tabbar img{width:16px;height:16px}
+    .tabbar .domain{margin-left:auto;color:#9d9da1}
+    iframe{display:block;width:100%;height:910px;border:0;background:#18191b}
+    .browser[data-device="mobile"] iframe{height:820px}
+    .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:#656566;margin-top:18px}
+    .footer a{color:inherit;text-underline-offset:3px}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+    @media(hover:hover){button:hover{background:#fffdf6}.footer a:hover{color:#252628}}
+    @media(max-width:600px){main{padding:22px 14px}.toolbar{gap:14px}h1{font-size:27px}.domain{display:none}.browser{border-radius:8px}.options button{font-size:12px;padding:7px 10px}}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topline">Pøziel / In context</div>
+    <h1>C1 or C3?</h1>
+    <p class="intro">The same page and portrait, with each logo beside your name and in the browser tab.</p>
+    <div class="toolbar">
+      <div class="options" role="group" aria-label="Logo">
+        <button type="button" data-logo="c1" aria-pressed="true"><img src="../round-3/c1-open-orbit.svg" alt="">C1 · Open orbit</button>
+        <button type="button" data-logo="c3" aria-pressed="false"><img src="../round-3/c3-cut-circle.svg" alt="">C3 · Cut circle</button>
+      </div>
+      <div class="options devices" role="group" aria-label="Preview size">
+        <button type="button" data-device="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" data-device="mobile" aria-pressed="false">Mobile</button>
+      </div>
+    </div>
+    <div class="browser" data-device="desktop">
+      <div class="tabbar"><img id="tab-icon" src="../round-3/c1-open-orbit.svg" alt=""><span>Pøziel — Alexandre Sauvé</span><span class="domain">poziel.com</span></div>
+      <iframe id="website" title="Landing page with C1 logo" src="../../../"></iframe>
+    </div>
+    <p id="selection-status" class="sr-only" role="status">Previewing C1.</p>
+    <div class="footer"><span>Local comparison · Scroll inside the preview to see the full page.</span><a href="../round-3/">Back to the logo studies</a></div>
+  </main>
+  <script>
+    const logos = {
+      c1: new URL('../round-3/c1-open-orbit.svg', location.href).href,
+      c3: new URL('../round-3/c3-cut-circle.svg', location.href).href
+    };
+    const frame = document.getElementById('website');
+    let selected = 'c1';
+    let installedDocument = null;
+    function installPreview() {
+      const doc = frame.contentDocument;
+      const name = doc?.querySelector('.profile-name');
+      if (!name || doc === installedDocument) return;
+      installedDocument = doc;
+      const style = doc.createElement('style');
+      style.textContent = '.preview-brand-line{display:flex;align-items:center;gap:8px}.preview-brand-logo{display:block;width:48px;height:48px;flex:none}.profile-column{position:static}@media(max-width:760px){.preview-brand-line{gap:6px}.preview-brand-logo{width:28px;height:28px}.profile-name{font-size:34px}}@media(max-width:380px){.preview-brand-logo{width:24px;height:24px}.profile-name{font-size:28px}}';
+      doc.head.append(style);
+      const line = doc.querySelector('.profile-brand');
+      line.classList.add('preview-brand-line');
+      const logo = doc.querySelector('.profile-logo');
+      logo.classList.add('preview-brand-logo');
+      updateLogo();
+    }
+    function updateLogo() {
+      const url = logos[selected];
+      document.getElementById('tab-icon').src = url;
+      document.getElementById('preview-favicon').href = url;
+      const logo = frame.contentDocument?.querySelector('.preview-brand-logo');
+      if (logo) logo.src = url;
+      const favicon = frame.contentDocument?.querySelector('link[rel="icon"]');
+      if (favicon) favicon.href = url;
+      frame.title = 'Landing page with ' + selected.toUpperCase() + ' logo';
+      document.querySelectorAll('[data-logo]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.logo === selected)));
+      document.getElementById('selection-status').textContent = 'Previewing ' + selected.toUpperCase() + '.';
+    }
+    frame.addEventListener('load', () => {
+      installPreview();
+      if (installedDocument !== frame.contentDocument) {
+        const observer = new MutationObserver(() => {
+          installPreview();
+          if (installedDocument === frame.contentDocument) observer.disconnect();
+        });
+        observer.observe(frame.contentDocument.body, {childList:true, subtree:true});
+      }
+    });
+    document.querySelectorAll('[data-logo]').forEach(button => button.addEventListener('click', () => {
+      selected = button.dataset.logo;
+      updateLogo();
+    }));
+    document.querySelectorAll('button[data-device]').forEach(button => button.addEventListener('click', () => {
+      document.querySelector('.browser').dataset.device = button.dataset.device;
+      document.querySelectorAll('button[data-device]').forEach(peer => peer.setAttribute('aria-pressed', String(peer === button)));
+    }));
+  </script>
+</body>
+</html>

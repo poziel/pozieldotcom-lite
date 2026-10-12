@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" data-background="light" data-color="ink">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Pøziel — Circular SVG studies</title>
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:light;--paper:#f3f1e9;--ink:#202124;--muted:#656565;--line:#cfcdc5;--mark:#202124;--accent:#93602b}
+:root[data-background="dark"]{color-scheme:dark;--paper:#18191b;--ink:#f3f1e9;--muted:#b1b0ab;--line:#404143;--mark:#f3f1e9;--accent:#eebd78}
+:root[data-color="amber"]{--mark:#eebd78}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "Segoe UI",Arial,sans-serif}
+main{max-width:1280px;margin:auto;padding:42px 48px 32px}
+.topline{display:flex;justify-content:space-between;gap:24px;font-size:12px;font-weight:600;letter-spacing:.06em}
+.topline span:last-child{color:var(--muted)}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.2;letter-spacing:-.04em;margin:38px 0 10px;font-weight:600}
+.intro{color:var(--muted);max-width:680px;margin:0}
+.controls{display:flex;flex-wrap:wrap;gap:28px;margin:26px 0 36px}
+fieldset{border:0;margin:0;padding:0;display:flex;gap:5px;align-items:center}
+legend{float:left;font-size:12px;margin-right:12px;color:var(--muted)}
+button{font:inherit;font-size:12px;background:transparent;color:var(--ink);border:1px solid transparent;padding:6px 12px;border-radius:4px;cursor:pointer}
+button[aria-pressed="true"]{border-color:var(--ink);font-weight:600}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.study{min-width:0;padding:24px 28px 28px}
+.study:first-child{padding-left:0}
+.study:last-child{padding-right:0}
+.study+.study{border-left:1px solid var(--line)}
+.study-label{display:flex;align-items:baseline;gap:12px}
+.letter{color:var(--muted);font-size:12px}
+h2{margin:0;font-size:18px;font-weight:600;letter-spacing:-.015em}
+.large{height:222px;display:grid;place-items:center;margin:18px 0 12px}
+.large svg{width:196px;height:196px}
+svg{color:var(--mark);display:block;flex:none}
+.note{font-size:12px;color:var(--muted);margin:0 0 24px;min-height:36px}
+.lockup{display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}
+.lockup svg{width:30px;height:30px}
+.lockup span{font-size:26px;font-weight:700;letter-spacing:-.06em}
+.sizes{display:flex;align-items:center;justify-content:space-around;gap:12px}
+figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+figure .icon-box{height:48px;display:flex;align-items:center}
+figcaption{color:var(--muted);font-size:10px}
+.download{display:inline-block;font-size:12px;color:var(--ink);margin-top:28px;text-underline-offset:4px}
+.footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:12px;margin-top:22px}
+@media(hover:hover){button:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}a:hover{color:var(--accent)}}
+@media(max-width:760px){main{padding:28px 24px}.studies{grid-template-columns:1fr}.study,.study:first-child,.study:last-child{padding:24px 0}.study+.study{border-left:0;border-top:1px solid var(--line)}.large{height:190px}.large svg{width:180px;height:180px}.note{min-height:0}.sizes{justify-content:center;gap:48px}.topline{font-size:10px}.controls{gap:14px}}
+</style>
+</head>
+<body>
+<main>
+<div class="topline"><span>PØZIEL / LOGO STUDIES</span><span>ROUND 02 · SVG</span></div>
+<h1>Circular. Abstract. Symmetrical.</h1>
+<p class="intro">Three new directions, built directly in SVG. Compare the silhouette, the wordmark, and the small sizes.</p>
+<div class="controls">
+<fieldset><legend>Background</legend><button data-group="background" data-value="light" aria-pressed="true">Light</button><button data-group="background" data-value="dark" aria-pressed="false">Dark</button></fieldset>
+<fieldset><legend>Mark</legend><button data-group="color" data-value="ink" aria-pressed="true">Monochrome</button><button data-group="color" data-value="amber" aria-pressed="false">Amber</button></fieldset>
+</div>
+<div class="studies">
+<section class="study" aria-labelledby="title-a">
+<div class="study-label"><span class="letter">A</span><h2 id="title-a">Twin arc</h2></div>
+<div class="large" role="img" aria-label="Twin arc abstract logo"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/>
+    <path transform="rotate(180 64 64)" d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/></svg></div>
+<p class="note">Two rounded hooks. Half-turn symmetry.</p>
+<div class="lockup"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/>
+    <path transform="rotate(180 64 64)" d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/></svg><span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/>
+    <path transform="rotate(180 64 64)" d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/></svg></div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/>
+    <path transform="rotate(180 64 64)" d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/></svg></div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/>
+    <path transform="rotate(180 64 64)" d="M64 12a52 52 0 0 1 52 52 28 28 0 0 1-28 28H76a10 10 0 0 1 0-20h12a8 8 0 0 0 8-8 32 32 0 0 0-32-32 10 10 0 0 1 0-20Z"/></svg></div><figcaption>48 px</figcaption></figure></div>
+<a class="download" href="./a-twin-arc.svg" download>Download A · SVG</a>
+</section>
+<section class="study" aria-labelledby="title-b">
+<div class="study-label"><span class="letter">B</span><h2 id="title-b">Threefold</h2></div>
+<div class="large" role="img" aria-label="Threefold abstract logo"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(120 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(240 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/></svg></div>
+<p class="note">Three curved segments. Third-turn symmetry.</p>
+<div class="lockup"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(120 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(240 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/></svg><span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(120 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(240 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/></svg></div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(120 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(240 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/></svg></div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(120 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/>
+    <path transform="rotate(240 64 64)" d="M 69.435 12.285 A 52 52 0 0 1 112.864 81.785 L 74.083 84.672 A 23 23 0 0 0 81.619 49.216 Z"/></svg></div><figcaption>48 px</figcaption></figure></div>
+<a class="download" href="./b-threefold.svg" download>Download B · SVG</a>
+</section>
+<section class="study" aria-labelledby="title-c">
+<div class="study-label"><span class="letter">C</span><h2 id="title-c">Quarter</h2></div>
+<div class="large" role="img" aria-label="Quarter abstract logo"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(90 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(180 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(270 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/></svg></div>
+<p class="note">Four soft corners. Quarter-turn symmetry.</p>
+<div class="lockup"><svg class="" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(90 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(180 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(270 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/></svg><span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(90 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(180 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(270 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/></svg></div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(90 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(180 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(270 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/></svg></div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" viewBox="0 0 128 128" aria-hidden="true" fill="currentColor"><path transform="rotate(0 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(90 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(180 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/>
+    <path transform="rotate(270 64 64)" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z"/></svg></div><figcaption>48 px</figcaption></figure></div>
+<a class="download" href="./c-quarter.svg" download>Download C · SVG</a>
+</section>
+</div>
+<div class="footer"><span>Transparent · Single color · Editable paths</span><span>Exploration only — the website is unchanged.</span></div>
+</main>
+<script>
+document.querySelectorAll('button[data-group]').forEach(button=>{
+ button.addEventListener('click',()=>{
+  const group=button.dataset.group;
+  document.documentElement.dataset[group]=button.dataset.value;
+  document.querySelectorAll('button[data-group="'+group+'"]').forEach(peer=>peer.setAttribute('aria-pressed',String(peer===button)));
+ });
+});
+</script>
+</body>
+</html>

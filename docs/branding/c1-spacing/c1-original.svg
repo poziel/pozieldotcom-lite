@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M18.087 39.587A52 52 0 0 1 109.913 39.587A10.256 10.256 0 0 1 94.903 53.568A35 35 0 0 0 33.097 53.568A10.256 10.256 0 0 1 18.087 39.587Z" transform="rotate(-16 64 64)" fill="url(#c1-warm)"/>
+  <path class="base" d="M18.087 39.587A52 52 0 0 1 109.913 39.587A10.256 10.256 0 0 1 94.903 53.568A35 35 0 0 0 33.097 53.568A10.256 10.256 0 0 1 18.087 39.587Z" transform="rotate(164 64 64)" fill="url(#c1-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-core)"/>
+  <path class="facet" d="M33.097 53.568C45 29 76 18 101.406 27.878A52 52 0 0 1 109.913 39.587A10.256 10.256 0 0 1 94.903 53.568A35 35 0 0 0 33.097 53.568Z" transform="rotate(-16 64 64)" fill="url(#c1-shade)"/>
+  <path class="facet" d="M33.097 53.568C45 29 76 18 101.406 27.878A52 52 0 0 1 109.913 39.587A10.256 10.256 0 0 1 94.903 53.568A35 35 0 0 0 33.097 53.568Z" transform="rotate(164 64 64)" fill="url(#c1-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-shade)"/>
+</svg>

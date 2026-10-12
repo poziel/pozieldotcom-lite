@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pøziel — folded P study</title>
+  <link rel="icon" type="image/svg+xml" href="/brand/poziel-mark.svg">
+  <style>
+    @font-face { font-family: DM; src: url('/node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2') format('woff2'); font-weight: 100 1000; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 48px; background: #111113; color: #f2f0f5; font: 15px/1.6 DM, system-ui, sans-serif; }
+    main { max-width: 1120px; margin: auto; }
+    header { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -.04em; }
+    header p { margin: 0; color: #abacae; }
+    .studies { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .panel { background: #18191b; border-radius: 16px; padding: 30px 36px; }
+    .light { background: #eeecf2; color: #252628; }
+    .lockup { display: flex; flex-direction: column; align-items: center; padding: 12px 0 36px; }
+    .mark { width: 232px; height: 232px; }
+    .name { margin: 4px 0 0; font-size: 54px; line-height: 1.2; font-weight: 800; letter-spacing: -.065em; }
+    .name span { color: #b08af0; }
+    .light .name span { color: #6d28b8; }
+    .sizes { display: flex; align-items: end; justify-content: space-between; border-top: 1px solid #ffffff1f; padding-top: 22px; }
+    .light .sizes { border-color: #25262824; }
+    figure { display: flex; flex-direction: column; align-items: center; gap: 14px; margin: 0; }
+    figcaption { font-size: 12px; opacity: .7; }
+    .mono { width: 48px; height: 48px; background: currentColor; mask: url('./poziel-mark-mono.svg') center/contain no-repeat; }
+    .palette { display: flex; gap: 24px; flex-wrap: wrap; margin: 28px 0 0; padding: 0; list-style: none; }
+    .palette li { display: flex; gap: 10px; align-items: center; color: #abacae; font-size: 12px; }
+    .swatch { width: 20px; height: 20px; border-radius: 50%; background: var(--color); }
+    footer { display: flex; gap: 24px; justify-content: space-between; margin-top: 24px; color: #abacae; font-size: 13px; }
+    a { color: #b08af0; text-underline-offset: 4px; }
+    a:focus-visible { outline: 2px solid #b08af0; outline-offset: 4px; }
+    @media (max-width: 700px) { body { padding: 24px; } header, footer { display: block; } .studies { grid-template-columns: 1fr; } header p { margin-top: 8px; } .panel { padding-inline: 28px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>A new fold for Pøziel.</h1><p>Pink · violet · electric blue</p></header>
+    <div class="studies">
+      <section class="panel" aria-label="Logo on charcoal">
+        <div class="lockup"><img class="mark" src="/brand/poziel-mark.svg" alt="Abstract folded P logo"><p class="name">Pøziel<span>.</span></p></div>
+        <div class="sizes">
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="16" height="16"><figcaption>16 px</figcaption></figure>
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="24" height="24"><figcaption>24 px</figcaption></figure>
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="48" height="48"><figcaption>48 px</figcaption></figure>
+          <figure><div class="mono" role="img" aria-label="Monochrome logo"></div><figcaption>One color</figcaption></figure>
+        </div>
+      </section>
+      <section class="panel light" aria-label="Logo on pale lilac">
+        <div class="lockup"><img class="mark" src="/brand/poziel-mark.svg" alt="Abstract folded P logo"><p class="name">Pøziel<span>.</span></p></div>
+        <div class="sizes">
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="16" height="16"><figcaption>16 px</figcaption></figure>
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="24" height="24"><figcaption>24 px</figcaption></figure>
+          <figure><img src="/brand/poziel-mark.svg" alt="" width="48" height="48"><figcaption>48 px</figcaption></figure>
+          <figure><div class="mono" role="img" aria-label="Monochrome logo"></div><figcaption>One color</figcaption></figure>
+        </div>
+      </section>
+    </div>
+    <ul class="palette" aria-label="Website palette">
+      <li><span class="swatch" style="--color:#6d28b8"></span>Deep violet · light surfaces</li>
+      <li><span class="swatch" style="--color:#9964e8"></span>Violet · headline</li>
+      <li><span class="swatch" style="--color:#b08af0"></span>Lilac · links &amp; labels</li>
+      <li><span class="swatch" style="--color:#fa71cd"></span>Pink · logo</li>
+      <li><span class="swatch" style="--color:#58b6ff"></span>Blue · logo</li>
+    </ul>
+    <footer><span>First pass · native SVG paths and gradients · transparent background</span><a href="/">See it on the website →</a></footer>
+  </main>
+</body>
+</html>

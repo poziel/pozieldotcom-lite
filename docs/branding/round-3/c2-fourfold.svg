@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-shade)"/>
+</svg>

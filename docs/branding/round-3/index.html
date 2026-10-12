@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en" data-background="light" data-color="gradient">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Pøziel — Circle and diamond SVG studies</title>
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:light;--paper:#f3f1e9;--ink:#202124;--muted:#656565;--line:#cfcdc5;--mark:#202124;--accent:#93602b}
+:root[data-background="dark"]{color-scheme:dark;--paper:#18191b;--ink:#f3f1e9;--muted:#b1b0ab;--line:#404143;--mark:#f3f1e9;--accent:#eebd78}
+:root[data-color="amber"]{--mark:#eebd78}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "Segoe UI",Arial,sans-serif}
+main{max-width:1280px;margin:auto;padding:42px 48px 32px}
+.topline{display:flex;justify-content:space-between;gap:24px;font-size:12px;font-weight:600;letter-spacing:.06em}
+.topline span:last-child{color:var(--muted)}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.2;letter-spacing:-.04em;margin:38px 0 10px;font-weight:600}
+.intro{color:var(--muted);max-width:680px;margin:0}
+.controls{display:flex;flex-wrap:wrap;gap:28px;margin:26px 0 36px}
+fieldset{border:0;margin:0;padding:0;display:flex;gap:5px;align-items:center}
+legend{float:left;font-size:12px;margin-right:12px;color:var(--muted)}
+button{font:inherit;font-size:12px;background:transparent;color:var(--ink);border:1px solid transparent;padding:6px 12px;border-radius:4px;cursor:pointer}
+button[aria-pressed="true"]{border-color:var(--ink);font-weight:600}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.study{min-width:0;padding:24px 28px 28px}
+.study:first-child{padding-left:0}
+.study:last-child{padding-right:0}
+.study+.study{border-left:1px solid var(--line)}
+.study-label{display:flex;align-items:baseline;gap:12px}
+.letter{color:var(--muted);font-size:12px}
+h2{margin:0;font-size:18px;font-weight:600;letter-spacing:-.015em}
+.large{height:222px;display:grid;place-items:center;margin:18px 0 12px}
+.large svg{width:196px;height:196px}
+svg{color:var(--mark);display:block;flex:none}
+.note{font-size:12px;color:var(--muted);margin:0 0 24px;min-height:36px}
+.lockup{display:flex;align-items:center;justify-content:center;gap:10px;min-height:64px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}
+.lockup svg{width:30px;height:30px}
+.lockup span{font-size:26px;font-weight:700;letter-spacing:-.06em}
+.sizes{display:flex;align-items:center;justify-content:space-around;gap:12px}
+figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+figure .icon-box{height:48px;display:flex;align-items:center}
+figcaption{color:var(--muted);font-size:10px}
+.download{display:inline-block;font-size:12px;color:var(--ink);margin-top:28px;text-underline-offset:4px}
+.footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:12px;margin-top:22px}
+@media(hover:hover){button:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}a:hover{color:var(--accent)}}
+@media(max-width:760px){main{padding:28px 24px}.studies{grid-template-columns:1fr}.study,.study:first-child,.study:last-child{padding:24px 0}.study+.study{border-left:0;border-top:1px solid var(--line)}.large{height:190px}.large svg{width:180px;height:180px}.note{min-height:0}.sizes{justify-content:center;gap:48px}.topline{font-size:10px}.controls{gap:14px}}
+
+:root[data-color="ink"] .base,:root[data-color="amber"] .base{fill:var(--mark)}
+:root[data-color="ink"] .facet,:root[data-color="amber"] .facet{display:none}
+.downloads{display:flex;flex-wrap:wrap;gap:16px}.download{margin-top:24px}
+.note{min-height:36px}.large{height:212px}
+.reference{font-size:12px;color:var(--muted)}.reference a{color:inherit;text-underline-offset:3px}
+@media(max-width:760px){.note{min-height:0}}
+</style>
+</head>
+<body>
+<main>
+<div class="topline"><span>PØZIEL / LOGO STUDIES</span><span>ROUND 03 · SVG</span></div>
+<h1>Circle + diamond.</h1>
+<p class="intro">Three takes on the reference you liked, using C’s balance as a starting point. Compare them in color and in one solid fill.</p>
+<div class="controls">
+<fieldset><legend>Background</legend><button data-group="background" data-value="light" aria-pressed="true">Light</button><button data-group="background" data-value="dark" aria-pressed="false">Dark</button></fieldset>
+<fieldset><legend>Finish</legend><button data-group="color" data-value="gradient" aria-pressed="true">Color</button><button data-group="color" data-value="amber" aria-pressed="false">Amber</button><button data-group="color" data-value="ink" aria-pressed="false">Monochrome</button></fieldset>
+</div>
+<div class="studies">
+<section class="study" aria-labelledby="title-c1">
+<div class="study-label"><span class="letter">C1</span><h2 id="title-c1">Open orbit</h2></div>
+<div class="large" role="img" aria-label="Open orbit logo"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-large-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-large-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-large-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-large-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-large-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#c1-large-warm)"/>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#c1-large-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-large-core)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#c1-large-shade)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#c1-large-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-large-shade)"/>
+</svg>
+</div>
+<p class="note">Two rounded ribbons around a faceted diamond.</p>
+<div class="lockup"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-lockup-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-lockup-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-lockup-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-lockup-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-lockup-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#c1-lockup-warm)"/>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#c1-lockup-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-lockup-core)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#c1-lockup-shade)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#c1-lockup-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-lockup-shade)"/>
+</svg>
+<span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-s16-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s16-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s16-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s16-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s16-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#c1-s16-warm)"/>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#c1-s16-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-s16-core)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#c1-s16-shade)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#c1-s16-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-s16-shade)"/>
+</svg>
+</div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-s24-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s24-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s24-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s24-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s24-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#c1-s24-warm)"/>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#c1-s24-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-s24-core)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#c1-s24-shade)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#c1-s24-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-s24-shade)"/>
+</svg>
+</div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c1-s48-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s48-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s48-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s48-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c1-s48-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(-16 64 64)" fill="url(#c1-s48-warm)"/>
+  <path class="base" d="M20.389 35.679A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938A10.442 10.442 0 0 1 20.389 35.679Z" transform="rotate(164 64 64)" fill="url(#c1-s48-cool)"/>
+  <path class="base" d="M64 43 85 64 64 85 43 64Z" fill="url(#c1-s48-core)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(-16 64 64)" fill="url(#c1-s48-shade)"/>
+  <path class="facet" d="M34.647 50.938C45 29 76 18 101.406 27.878A52 52 0 0 1 107.611 35.679A10.442 10.442 0 0 1 93.353 50.938A35 35 0 0 0 34.647 50.938Z" transform="rotate(164 64 64)" fill="url(#c1-s48-shade)"/>
+  <path class="facet" d="M43 64H85L64 85Z" fill="url(#c1-s48-shade)"/>
+</svg>
+</div><figcaption>48 px</figcaption></figure></div>
+<div class="downloads"><a class="download" href="./c1-open-orbit.svg" download>Color SVG</a><a class="download" href="./c1-open-orbit-mono.svg" download>Single-color SVG</a></div>
+</section>
+<section class="study" aria-labelledby="title-c2">
+<div class="study-label"><span class="letter">C2</span><h2 id="title-c2">Fourfold</h2></div>
+<div class="large" role="img" aria-label="Fourfold logo"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-large-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-large-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-large-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-large-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-large-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-large-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-large-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-large-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-large-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-large-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-large-shade)"/>
+</svg>
+</div>
+<p class="note">C’s four-part frame, with a diamond at its center.</p>
+<div class="lockup"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-lockup-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-lockup-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-lockup-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-lockup-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-lockup-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-lockup-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-lockup-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-lockup-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-lockup-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-lockup-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-lockup-shade)"/>
+</svg>
+<span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-s16-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s16-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s16-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s16-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s16-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-s16-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-s16-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-s16-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-s16-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-s16-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-s16-shade)"/>
+</svg>
+</div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-s24-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s24-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s24-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s24-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s24-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-s24-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-s24-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-s24-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-s24-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-s24-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-s24-shade)"/>
+</svg>
+</div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c2-s48-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s48-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s48-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s48-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c2-s48-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(0 64 64)" fill="url(#c2-s48-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(90 64 64)" fill="url(#c2-s48-warm)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(180 64 64)" fill="url(#c2-s48-cool)"/>
+  <path class="base" d="M70 12.347A52 52 0 0 1 115.653 58H94c-13.255 0-24-10.745-24-24Z" transform="rotate(270 64 64)" fill="url(#c2-s48-warm)"/>
+  <path class="base" d="M64 44 84 64 64 84 44 64Z" fill="url(#c2-s48-core)"/>
+  <path class="facet" d="M44 64H84L64 84Z" fill="url(#c2-s48-shade)"/>
+</svg>
+</div><figcaption>48 px</figcaption></figure></div>
+<div class="downloads"><a class="download" href="./c2-fourfold.svg" download>Color SVG</a><a class="download" href="./c2-fourfold-mono.svg" download>Single-color SVG</a></div>
+</section>
+<section class="study" aria-labelledby="title-c3">
+<div class="study-label"><span class="letter">C3</span><h2 id="title-c3">Cut circle</h2></div>
+<div class="large" role="img" aria-label="Cut circle logo"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-large-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-large-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-large-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-large-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-large-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-large-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-large-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-large-shade)"/>
+</svg>
+</div>
+<p class="note">A continuous circle with a rounded diamond opening.</p>
+<div class="lockup"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-lockup-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-lockup-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-lockup-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-lockup-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-lockup-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-lockup-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-lockup-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-lockup-shade)"/>
+</svg>
+<span>Pøziel</span></div>
+<div class="sizes"><figure><div class="icon-box"><svg width="16" height="16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-s16-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s16-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s16-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s16-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s16-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-s16-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-s16-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-s16-shade)"/>
+</svg>
+</div><figcaption>16 px</figcaption></figure><figure><div class="icon-box"><svg width="24" height="24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-s24-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s24-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s24-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s24-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s24-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-s24-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-s24-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-s24-shade)"/>
+</svg>
+</div><figcaption>24 px</figcaption></figure><figure><div class="icon-box"><svg width="48" height="48" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<defs>
+  <linearGradient id="c3-s48-warm" x1="12" y1="12" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="warm-start"/><stop offset=".54" stop-color="#fa6685" class="warm-mid"/><stop offset="1" stop-color="#c043cb" class="warm-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s48-cool" x1="12" y1="116" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#38ccdd" class="cool-start"/><stop offset=".52" stop-color="#5373ea" class="cool-mid"/><stop offset="1" stop-color="#8852de" class="cool-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s48-core" x1="47" y1="44" x2="83" y2="84" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#ffb269" class="core-start"/><stop offset=".55" stop-color="#fa6685" class="core-mid"/><stop offset="1" stop-color="#b249ca" class="core-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s48-halo" x1="26" y1="26" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fa8293" class="halo-start"/><stop offset=".52" stop-color="#9661df" class="halo-mid"/><stop offset="1" stop-color="#38cadd" class="halo-end"/>
+  </linearGradient>
+  <linearGradient id="c3-s48-shade" x1="64" y1="64" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#392653" stop-opacity=".32"/><stop offset="1" stop-color="#392653" stop-opacity=".04"/>
+  </linearGradient>
+</defs>
+  <path class="base" d="M116 64A52 52 0 1 0 12 64A52 52 0 1 0 116 64Z M64 28Q68 28 72 32L96 56Q104 64 96 72L72 96Q64 104 56 96L32 72Q24 64 32 56L56 32Q60 28 64 28Z" fill-rule="evenodd" fill="url(#c3-s48-halo)"/>
+  <path class="base" d="M64 47 81 64 64 81 47 64Z" fill="url(#c3-s48-core)"/>
+  <path class="facet" d="M47 64H81L64 81Z" fill="url(#c3-s48-shade)"/>
+</svg>
+</div><figcaption>48 px</figcaption></figure></div>
+<div class="downloads"><a class="download" href="./c3-cut-circle.svg" download>Color SVG</a><a class="download" href="./c3-cut-circle-mono.svg" download>Single-color SVG</a></div>
+</section>
+</div>
+<div class="footer"><span>Native SVG paths + gradients · Transparent backgrounds</span><span>Drafts for review</span></div>
+<p class="reference"><a href="../round-2/">Previous round</a></p>
+</main>
+<script>
+document.querySelectorAll('button[data-group]').forEach(button=>{
+ button.addEventListener('click',()=>{
+  const group=button.dataset.group;
+  document.documentElement.dataset[group]=button.dataset.value;
+  document.querySelectorAll('button[data-group="'+group+'"]').forEach(peer=>peer.setAttribute('aria-pressed',String(peer===button)));
+ });
+});
+</script>
+</body>
+</html>
