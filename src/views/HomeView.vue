@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
 import Button from 'primevue/button'
 import SocialIcon from '../components/SocialIcon.vue'
 import MadeWithLoveCredit from '../components/MadeWithLoveCredit.vue'
@@ -9,6 +10,30 @@ import { socials } from '../config/socials.js'
 const brandMarkUrl = `${import.meta.env.BASE_URL}brand/poziel-mark.svg`
 const visibleSocials = socials.filter((social) => social.url)
 const roles = site.roles.split('.').map((role) => role.trim()).filter(Boolean)
+const profileColumn = ref(null)
+const profileFitsViewport = ref(false)
+let profileResizeObserver
+
+function updateProfilePosition() {
+  const column = profileColumn.value
+  if (!column) return
+  const top = parseFloat(getComputedStyle(column).top) || 0
+  // Short windows must still allow every profile link to scroll into view.
+  profileFitsViewport.value = column.getBoundingClientRect().height + top <= window.innerHeight
+}
+
+onMounted(() => {
+  updateProfilePosition()
+  profileResizeObserver = new ResizeObserver(updateProfilePosition)
+  profileResizeObserver.observe(profileColumn.value)
+  window.addEventListener('resize', updateProfilePosition)
+})
+
+onUnmounted(() => {
+  profileResizeObserver?.disconnect()
+  window.removeEventListener('resize', updateProfilePosition)
+})
+
 function skipToContent() {
   document.getElementById('main')?.focus()
 }
@@ -17,8 +42,16 @@ function skipToContent() {
 <template>
   <a class="skip-link" href="#main" @click.prevent="skipToContent">Skip to content</a>
   <div class="page-shell mx-auto">
-    <div class="portfolio-grid grid items-start">
-      <aside class="profile-column" aria-label="About Alexandre and social profiles">
+    <main id="main" tabindex="-1" class="portfolio-grid grid items-start min-w-0">
+      <section class="intro" aria-labelledby="intro-title">
+        <h1 id="intro-title" class="headline"><span v-for="(role, index) in roles" :key="role" :class="{ 'role-muted': index === 1, 'role-accent': index === 2 }">{{ role }}<span class="period">.</span></span></h1>
+        <p class="intro-bio">{{ site.bio }}</p>
+        <aside class="site-note flex items-start gap-3" aria-label="Website update">
+          <div><p>{{ site.announcement }}</p><p class="note-detail">{{ site.announcementDetail }}</p></div>
+        </aside>
+      </section>
+
+      <aside ref="profileColumn" class="profile-column" :class="{ 'is-sticky': profileFitsViewport }" aria-label="About Alexandre and social profiles">
         <div class="profile-card">
           <img :src="site.portrait" :alt="`Portrait of ${site.name}`" width="1254" height="1254" fetchpriority="high" class="portrait aspect-square w-full object-cover" />
           <div class="profile-details">
@@ -48,25 +81,15 @@ function skipToContent() {
         </section>
       </aside>
 
-      <main id="main" tabindex="-1" class="min-w-0">
-        <section class="intro" aria-labelledby="intro-title">
-          <h1 id="intro-title" class="headline"><span v-for="(role, index) in roles" :key="role" :class="{ 'role-muted': index === 1, 'role-accent': index === 2 }">{{ role }}<span class="period">.</span></span></h1>
-          <p class="intro-bio">{{ site.bio }}</p>
-          <aside class="site-note flex items-start gap-3" aria-label="Website update">
-            <div><p>{{ site.announcement }}</p><p class="note-detail">{{ site.announcementDetail }}</p></div>
-          </aside>
-        </section>
-
-        <section class="projects-section" aria-labelledby="projects-title">
-          <div class="section-title-row flex items-baseline justify-between gap-4">
-            <h2 id="projects-title">Projects</h2>
-          </div>
-          <ProjectList :projects="projects" />
-        </section>
-        <footer>
-          <MadeWithLoveCredit class="site-credit" maker-href="" />
-        </footer>
-      </main>
-    </div>
+      <section class="projects-section" aria-labelledby="projects-title">
+        <div class="section-title-row flex items-baseline justify-between gap-4">
+          <h2 id="projects-title">Projects</h2>
+        </div>
+        <ProjectList :projects="projects" />
+      </section>
+      <footer>
+        <MadeWithLoveCredit class="site-credit" maker-href="" />
+      </footer>
+    </main>
   </div>
 </template>
