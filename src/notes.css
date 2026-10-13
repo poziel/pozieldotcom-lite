@@ -189,15 +189,15 @@
 .posted-note .edit-note-button { margin-top: 8px; }
 /* Slide a note out of the stack before bringing it forward. */
 .board-viewport .posted-note:hover { z-index: 1; }
-.board-viewport .posted-note.is-selected { z-index: 2; }
-.board-viewport .posted-note.is-hovered { animation: reveal-note 170ms cubic-bezier(.2,.65,.35,1) forwards; }
+.board-viewport .posted-note.is-selected { z-index: 4; }
+.board-viewport .posted-note.is-lifting { animation: reveal-note 170ms cubic-bezier(.2,.65,.35,1) forwards; }
 @keyframes reveal-note {
   0% { z-index: 1; translate: 0 0; }
   45% { z-index: 1; translate: calc(22px * var(--board-zoom)) calc(-5px * var(--board-zoom)); }
   46% { z-index: 4; translate: calc(22px * var(--board-zoom)) calc(-5px * var(--board-zoom)); }
   100% { z-index: 4; translate: 0 0; }
 }
-.board-viewport.is-panning .posted-note, .board-viewport.canvas-tool-active .posted-note { animation: none !important; translate: none; z-index: 1 !important; transition: none; }
+.board-viewport.is-panning .posted-note, .board-viewport.canvas-tool-active .posted-note { animation: none !important; translate: none; transition: none; }
 .note-reader { position: fixed; margin: auto; width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; padding: 64px 36px 32px; border: 0; border-radius: 2px; background: linear-gradient(180deg, #00000017 0 34px, transparent 34px), var(--note-color); color: var(--note-ink); box-shadow: 0 24px 80px #0007; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--note-ink) 35%, var(--note-color)) var(--note-color); }
 .note-reader::backdrop { background: #100c17c7; backdrop-filter: blur(5px); }
 .reader-close { position: absolute; top: 4px; right: 9px; width: 28px; height: 28px; font-size: 22px; cursor: pointer; }
@@ -205,7 +205,7 @@
 .reader-message { font-size: clamp(20px, 3vw, 27px); line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
 .reader-signature { margin-top: 32px; font-size: 15px; overflow-wrap: anywhere; }
 .reader-date { display: block; font-size: 11px; margin-top: 14px; opacity: .75; }
-@media (prefers-reduced-motion: reduce) { .board-viewport .posted-note.is-hovered { animation: none; z-index: 4; } }
+@media (prefers-reduced-motion: reduce) { .board-viewport .posted-note.is-lifting { animation: none; z-index: 4; } }
 @media (max-width: 540px) { .note-reader { padding-inline: 24px; } }
 
 /* Compact note actions within the adhesive strip. */
@@ -249,3 +249,27 @@
 .board-viewport .posted-note.is-reading { visibility: hidden; }
 .note-reader { transform-origin: center; will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .drawer-nav-indicator { transition: none; } }
+/* Card selection and panning share a pointer threshold; selection remains in front. */
+.posted-note { user-select: none; -webkit-touch-callout: none; }
+.board-viewport .posted-note.is-selected:hover { z-index: 4; }
+.board-viewport.is-panning .posted-note.is-selected, .board-viewport.canvas-tool-active .posted-note.is-selected { z-index: 4; }
+.board-info { position: relative; }
+.board-info > .camera-position { position: absolute; right: 0; bottom: 100%; }
+@media (max-width: 700px) {
+  .board-header { display: grid; grid-template-columns: auto auto minmax(0, 1fr); column-gap: 8px; row-gap: 12px; }
+  .board-heading { grid-column: 1 / -1; grid-row: 1; }
+  .board-heading h1 { font-size: 25px; }
+  .board-back { grid-column: 1; grid-row: 2; min-height: 42px; }
+  .board-header-actions { display: contents; }
+  .board-header-actions .messages-button { grid-column: 2; grid-row: 2; padding-inline: 10px; }
+  .board-header-actions .board-button { grid-column: 3; grid-row: 2; padding-inline: 9px; }
+  .board-header-actions > button { min-width: 0; font-size: 10px; }
+  .board-header-actions svg { width: 15px; height: 15px; }
+  .board-bottom-bar { display: none; }
+  .board-info { padding-top: 8px; gap: 4px 7px; }
+  .board-info > span[role="status"], .board-info > span[role="alert"], .board-info > .footer-separator + span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .board-info > .camera-position { position: static; min-width: 45px; min-height: 0; padding: 0; font-size: 9px; flex-shrink: 0; }
+  .board-info > .verified-status { order: 2; margin-left: auto; }
+  .footer-actions { order: 3; }
+}
+@media (max-width: 360px) { .board-back span { display: none; } .board-back { padding-inline: 10px; } }

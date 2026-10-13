@@ -39,14 +39,14 @@ const messageInput = ref(null)
 const addButton = ref(null)
 const draft = ref(null)
 const selected = ref(null)
-const hovered = ref(null)
+const lifting = ref(null)
 const readingNote = ref(null)
 const readerDialog = ref(null)
 const deleteDialog = ref(null)
 const deleteTarget = ref(null)
 const deleting = ref(false)
 const deleteError = ref('')
-let hoverTimer
+let longPressTimer
 let readerAnimation
 let readerClosing = false
 const noteElement = note => board.value?.querySelector(`[data-note-id="${CSS.escape(note.id)}"]`)
@@ -115,7 +115,7 @@ async function confirmDelete() {
     notes.value = notes.value.filter(note => note.id !== id)
     if (readingNote.value?.id === id) await closeReader(false)
     if (selected.value === id) selected.value = null
-    if (hovered.value === id) hovered.value = null
+    if (lifting.value === id) lifting.value = null
     deleteDialog.value?.close()
     deleteTarget.value = null
     status.value = 'Your note has been deleted.'
@@ -133,13 +133,12 @@ function readerBackdropClick(event) {
   if (readerPointerStartedOutside && outsideReader(event)) closeReader()
   readerPointerStartedOutside = false
 }
-function hoverNote(note) {
-  clearTimeout(hoverTimer)
-  if (!canvasTool.value && !gesture.value) hovered.value = note.id
-}
-function leaveNote(note) {
-  clearTimeout(hoverTimer)
-  hoverTimer = setTimeout(() => { if (hovered.value === note.id) hovered.value = null }, 190)
+async function selectNote(note) {
+  if (canvasTool.value || gesture.value === 'pan' || selected.value === note.id) return
+  selected.value = note.id
+  lifting.value = null
+  await nextTick()
+  lifting.value = note.id
 }
 const gesture = ref('')
 const messagesOpen = ref(false)
@@ -257,15 +256,26 @@ function localPoint(event) {
 }
 function beginGesture(event, mode) {
   if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0) || (mode === 'note' && posting.value)) return
-  if (mode === 'pan' && event.target.closest('.sticky-note') && !canvasTool.value) return
-  event.preventDefault()
-  hovered.value = null
+  if (mode === 'pan' && !canvasTool.value && event.target.closest('button, input, textarea, .draft-note')) return
+  clearTimeout(longPressTimer)
+  const pendingPan = mode === 'pan' && !canvasTool.value
+  if (!pendingPan) { event.preventDefault(); lifting.value = null }
   const point = localPoint(event)
   const world = screenToWorld(point, camera.value, viewport.value, zoom.value)
   const center = { x: position.value.x + noteWidth / 2, y: position.value.y + (draft.value?.offsetHeight || 400) / 2 }
-  pointer = { id: event.pointerId, target: event.currentTarget, point, previous: point, forced: canvasTool.value, center, startAngle: angle.value, pointerAngle: Math.atan2(world.y - center.y, world.x - center.x), offset: { x: world.x - position.value.x, y: world.y - position.value.y } }
-  gesture.value = mode
-  event.currentTarget.setPointerCapture(event.pointerId)
+  pointer = { id: event.pointerId, target: event.currentTarget, point, previous: point, start: point, forced: canvasTool.value, pointerType: event.pointerType, center, startAngle: angle.value, pointerAngle: Math.atan2(world.y - center.y, world.x - center.x), offset: { x: world.x - position.value.x, y: world.y - position.value.y } }
+  gesture.value = pendingPan ? 'pending-pan' : mode
+  if (!pendingPan) event.currentTarget.setPointerCapture(event.pointerId)
+  const noteId = event.target.closest('.posted-note')?.dataset.noteId
+  if (pendingPan && event.pointerType !== 'mouse' && noteId) {
+    longPressTimer = setTimeout(() => {
+      if (!pointer || gesture.value !== 'pending-pan') return
+      const note = notes.value.find(note => note.id === noteId)
+      suppressBoardClick = true
+      stopGesture()
+      if (note) { selected.value = note.id; readNote(note) }
+    }, 500)
+  }
   if (mode === 'note') { lastTime = 0; frame = requestAnimationFrame(autoPan) }
 }
 function captureCanvasTool(event) {
@@ -284,7 +294,7 @@ function shortcutDown(event) {
   if (event.code !== 'Space' || event.isComposing || event.target.closest('input, textarea, select, [contenteditable="true"]') || verificationDialog.value?.open || readerDialog.value?.open || deleteDialog.value?.open) return
   event.preventDefault()
   canvasTool.value = true
-  hovered.value = null
+  lifting.value = null
 }
 function shortcutUp(event) {
   if (event.code !== 'Space') return
@@ -292,6 +302,9 @@ function shortcutUp(event) {
   if (pointer?.forced) stopGesture()
 }
 function resetTools() { canvasTool.value = false; stopGesture() }
+function outsidePointerMove(event) {
+  if (pointer && !board.value?.contains(event.target)) movePointer(event)
+}
 function rotateKey(event) {
   if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || posting.value) return
   event.preventDefault()
@@ -305,6 +318,15 @@ function updateNote() {
 function movePointer(event) {
   if (!pointer || event.pointerId !== pointer.id) return
   pointer.point = localPoint(event)
+  if (gesture.value === 'pending-pan') {
+    const distance = Math.hypot(pointer.point.x - pointer.start.x, pointer.point.y - pointer.start.y)
+    if (distance < (pointer.pointerType === 'mouse' ? 6 : 9)) return
+    clearTimeout(longPressTimer)
+    lifting.value = null
+    gesture.value = 'pan'
+    suppressBoardClick = true
+    pointer.target.setPointerCapture(pointer.id)
+  }
   if (gesture.value === 'pan') setCamera(camera.value.x + (pointer.previous.x - pointer.point.x) / zoom.value, camera.value.y + (pointer.previous.y - pointer.point.y) / zoom.value)
   else if (gesture.value === 'rotate') {
     const world = screenToWorld(pointer.point, camera.value, viewport.value, zoom.value)
@@ -324,6 +346,7 @@ function autoPan(time) {
 function stopGesture(event) {
   if (event?.pointerId !== undefined && pointer && event.pointerId !== pointer.id) return
   const previous = pointer
+  clearTimeout(longPressTimer)
   pointer = null
   gesture.value = ''
   cancelAnimationFrame(frame)
@@ -413,10 +436,13 @@ onMounted(() => {
   window.addEventListener('keydown', shortcutDown)
   window.addEventListener('keyup', shortcutUp)
   window.addEventListener('blur', resetTools)
+  window.addEventListener('pointermove', outsidePointerMove)
+  window.addEventListener('pointerup', stopGesture)
+  window.addEventListener('pointercancel', stopGesture)
   verificationTimer = setInterval(() => { now.value = Date.now() }, 15000)
   refresh()
 })
-onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(verificationTimer); clearTimeout(hoverTimer); window.removeEventListener('blur', stopGesture); window.removeEventListener('blur', resetTools); window.removeEventListener('keydown', shortcutDown); window.removeEventListener('keyup', shortcutUp) })
+onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(verificationTimer); clearTimeout(longPressTimer); window.removeEventListener('blur', stopGesture); window.removeEventListener('blur', resetTools); window.removeEventListener('keydown', shortcutDown); window.removeEventListener('keyup', shortcutUp); window.removeEventListener('pointermove', outsidePointerMove); window.removeEventListener('pointerup', stopGesture); window.removeEventListener('pointercancel', stopGesture) })
 </script>
 
 <template>
@@ -431,7 +457,7 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
       @click.capture="captureBoardClick" @pointerdown.capture="captureCanvasTool" @pointerdown="beginGesture($event, 'pan')" @pointermove="movePointer" @pointerup="stopGesture" @pointercancel="stopGesture" @lostpointercapture="stopGesture" @wheel="wheel" @keydown.self="moveKey($event, 'pan')">
       <div class="world-origin" :style="paperStyle({ x: 0, y: 0 })" aria-hidden="true"></div>
       <div v-if="!notes.length && !editing" class="board-welcome" :style="paperStyle({ x: -150, y: -110 })"><p>Good people.<br>Little paper things.</p><small>The first little hello could be yours.</small></div>
-      <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-hovered': hovered === note.id, 'is-reading': readingNote?.id === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @mouseenter="hoverNote(note)" @mouseleave="leaveNote(note)" @focus="selected = note.id" @click="selected = note.id" @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
+      <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-lifting': lifting === note.id, 'is-reading': readingNote?.id === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @click="selectNote(note)" @contextmenu.prevent @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
         <span class="note-message">{{ note.message }}</span><span class="note-signature">— {{ note.author || 'a friendly stranger' }}</span>
         <time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" />
       </article>
@@ -460,9 +486,8 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
     </div>
     <div class="board-bottom-bar">
       <p class="board-hint"><template v-if="canvasTool">Canvas move tool active</template><template v-else-if="gesture === 'note'">Hold near an edge to keep exploring.</template><template v-else><span>Drag the board to explore</span><i class="footer-separator" aria-hidden="true"></i><span>Drag a note to place it</span><i class="footer-separator" aria-hidden="true"></i><span>Hold Space to pan</span><i class="footer-separator" aria-hidden="true"></i><span>Double-click a note to read</span></template></p>
-      <span class="camera-position">{{ Math.round(camera.x) }}, {{ Math.round(camera.y) }}</span>
     </div>
-    <div class="board-info"><span>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</span><i class="footer-separator" aria-hidden="true"></i><span v-if="!boardConfigured">Preview · Posting opens soon</span><span v-else-if="loadError" role="alert">{{ loadError }}</span><span v-else role="status">{{ status || 'A few words can make someone’s day.' }}</span><span v-if="verificationMinutes" class="verified-status" :title="`Verification expires in ${verificationMinutes} minutes`">✓ Verified · {{ verificationMinutes }}m</span><div class="footer-actions"><button v-if="myNotes.length" class="text-button" :disabled="!missingMyNotes.length || posting || Boolean(gesture)" @click="findMyNotes">Find My Notes</button><i v-if="myNotes.length" class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="atOrigin || Boolean(gesture)" @click="centerBoard">Back to 0, 0</button><i class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="loading || posting || !boardConfigured" @click="refresh">{{ loading ? 'Loading…' : 'Refresh' }}</button></div></div>
+    <div class="board-info"><span>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</span><i class="footer-separator" aria-hidden="true"></i><span v-if="!boardConfigured">Preview · Posting opens soon</span><span v-else-if="loadError" role="alert">{{ loadError }}</span><span v-else role="status">{{ status || 'A few words can make someone’s day.' }}</span><span class="camera-position">{{ Math.round(camera.x) }}, {{ Math.round(camera.y) }}</span><span v-if="verificationMinutes" class="verified-status" :title="`Verification expires in ${verificationMinutes} minutes`">✓ Verified · {{ verificationMinutes }}m</span><div class="footer-actions"><button v-if="myNotes.length" class="text-button" :disabled="!missingMyNotes.length || posting || Boolean(gesture)" @click="findMyNotes">Find My Notes</button><i v-if="myNotes.length" class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="atOrigin || Boolean(gesture)" @click="centerBoard">Back to 0, 0</button><i class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="loading || posting || !boardConfigured" @click="refresh">{{ loading ? 'Loading…' : 'Refresh' }}</button></div></div>
   </main>
   <Teleport to="body"><dialog ref="verificationDialog" class="verification-dialog" aria-labelledby="verification-title" @cancel.prevent="!posting && closeVerification()"><div class="verification-heading"><h2 id="verification-title">One quick human check</h2><button class="panel-close" aria-label="Close verification" :disabled="posting" @click="closeVerification">×</button></div><p>{{ posting ? 'Verified. Saving your note…' : 'Your note will be saved automatically after verification.' }}</p><NoteCaptcha v-if="verifying && !posting" ref="captcha" @token="verificationCompleted" /><p v-if="posting" class="verification-saving" role="status">Saving…</p></dialog></Teleport>
   <Teleport to="body"><dialog ref="readerDialog" class="note-reader" :style="readingNote ? noteAppearance(readingNote.color) : {}" aria-labelledby="reader-title" @cancel.prevent @pointerdown="readerPointerStartedOutside = outsideReader($event)" @click="readerBackdropClick"><template v-if="readingNote"><button class="reader-close" aria-label="Close note reader" @click="closeReader"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button><NoteActions v-if="readingNote.canEdit" :disabled="editing || posting || deleting" @edit="editFromReader" @delete="requestDelete(readingNote)" /><h2 id="reader-title" class="sr-only">Note from {{ readingNote.author || 'a friendly stranger' }}</h2><p class="reader-message">{{ readingNote.message }}</p><p class="reader-signature">— {{ readingNote.author || 'a friendly stranger' }}</p><time v-if="postedDate(readingNote.created_at)" class="reader-date" :datetime="readingNote.created_at">Posted {{ postedDate(readingNote.created_at) }}</time></template></dialog></Teleport>
