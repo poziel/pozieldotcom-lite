@@ -11,6 +11,10 @@ Thumbs.db
 
 # Docker
 .env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
 docker-compose.override.yml
 
 # Logs

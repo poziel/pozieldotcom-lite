@@ -65,6 +65,7 @@ function skipToContent() {
               <li>Currently at <a :href="site.employer.url" target="_blank" rel="noopener noreferrer">{{ site.employer.name }}<span class="sr-only"> (opens in a new tab)</span></a></li>
               <li><a :href="site.locationUrl" target="_blank" rel="noopener noreferrer">{{ site.location }}<span class="sr-only"> (Google Maps, opens in a new tab)</span></a></li>
             </ul>
+            <RouterLink class="leave-note-link" to="/notes">Leave me a note <span aria-hidden="true">↗</span></RouterLink>
           </div>
         </div>
         <section class="socials-section" aria-labelledby="socials-title">

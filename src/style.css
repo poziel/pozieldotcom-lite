@@ -47,6 +47,9 @@ main:focus { outline: none; }
 .profile-location a { text-decoration: underline; text-decoration-color: #b6b0c0; text-underline-offset: 3px; }
 .profile-location a:focus-visible { color: var(--color-accent-deep); outline-color: var(--color-accent-deep); }
 .socials-section { margin-top: 27px; }
+.leave-note-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 22px; padding: 12px 14px; border-radius: 7px; background: #6d28b8; color: white; font-size: 12px; font-weight: 650; }
+.leave-note-link:hover { background: #582094; }
+.leave-note-link:focus-visible { outline-color: #6d28b8; }
 .small-label { font-size: 10px; font-weight: 500; letter-spacing: .12em; color: var(--color-muted); }
 .social-list { margin-top: 13px; gap: 2px 4px; }
 .social-link { min-height: 65px; padding: 8px 2px; border-radius: 7px; color: #b9babd; font-size: 10px; transition: background-color 150ms ease-out; }

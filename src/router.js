@@ -6,6 +6,7 @@ export default createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: '/', name: 'home', component: HomeView },
+    { path: '/notes', name: 'notes', component: () => import('./views/NotesView.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
   scrollBehavior: () => ({ top: 0 }),

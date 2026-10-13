@@ -1,0 +1,62 @@
+# Visitor note board
+
+The profile button opens `/#/notes`. The board fills the viewport and starts centered on world coordinates `(0, 0)`. Visitors write, sign, and choose a color directly inside their draft sticky note. Six paper presets and a native custom color picker are available; text contrast adapts to the chosen color. The top-right X discards unsaved changes. Drag the background (mouse or touch), use the wheel/trackpad, or focus the board and use arrow keys to pan. Ctrl + mouse wheel zooms around the cursor; the bottom-right canvas controls zoom around the viewport center. Zoom ranges from 10% to 200%, with a percentage button to reset to 100%. World coordinates remain unchanged by zoom. The dot grid adapts its world spacing to keep dots 24–48 screen pixels apart and dims them away from 100% zoom, preventing dense patterns when zooming out. Dragging a note near or beyond any edge automatically pans the view until release; arrow keys on its handle also move it. The bottom-right footer groups Find My Notes, Back to 0, 0, and Refresh in that order. Back to 0, 0 is disabled at the origin. Find My Notes appears for drafts and owned saved notes, jumps to the next offscreen note, and is disabled when all of them are already in view. Refresh is disabled without configuration or while loading/saving, but remains available on a connected empty board to discover new messages. Note scrollbars inherit their paper and text colors. All notes opens a scrollable index of full notes, newest first; choosing one closes the panel and centers and focuses that note, even if it is far outside the current view. Creators can reopen their own published notes to edit text, signature, color, position, and orientation. Drag the circular handle above a draft to rotate it around its center; left/right arrow keys also adjust its angle. Hold Space outside text fields to use the canvas move tool over notes; release Space or blur the window to restore normal interaction. Other visitors can only read them. Each saved note displays its original posted date using the existing server-generated `created_at` timestamp, which remains unchanged by edits. All existing notes already have this value, so no timestamp migration is needed. Double-click a saved note (or focus it and press Enter) to read a larger upright copy in an overlay; Only a click outside the paper or its X closes the reader; clicks inside the paper and Escape leave it open. The adhesive strip is darker and writing starts below it. The pencil icon in the sticky strip opens creator editing. Hovering slides a note 22 pixels out of its stack over 170 milliseconds before raising it; hover animations are disabled while panning and respect reduced-motion settings. Coordinates extend to ±1,000,000 on each axis; the board renders only nearby notes instead of creating an enormous scrollable element.
+
+## Activation
+
+Configured on October 13, 2026:
+
+- Supabase: `pozieldotcom` (`mhzkhrmezjolkqaviluk`), Personal Free plan, Canada Central.
+- The database schema, creator editing, custom colors, note rotation, and `notes` Edge Function version 10 are deployed. The function issues server-signed 30-minute browser verification sessions after successful CAPTCHA.
+- Cloudflare: `pozieldotcom` Managed Turnstile widget for `poziel.com` (including its subdomains), with pre-clearance disabled. Its secret is stored only in Supabase Edge Function secrets.
+- Public connection values are configured in the ignored local `.env` and the three GitHub Actions repository variables. No website push or Pages deployment was performed as part of backend setup.
+- Allowed API origins: `https://poziel.com`, `https://www.poziel.com`, `http://localhost:5173`, and `http://127.0.0.1:5180`. Local posting uses the separate `poziel.com (Spin)` widget with localhost and 127.0.0.1 support, configured in the ignored `.env`. Its real secret is stored as `TURNSTILE_DEV_SECRET_KEY`. The server selects that secret only for allowed local origins and verifies the exact local hostname. Production origins continue using the production widget and reject local hostname tokens. Both save real notes to the same board; there is no CAPTCHA bypass or dummy test key.
+- Verified: live board GET returns 200 with numeric rotation values, forged verification sessions return 403 with VERIFICATION_REQUIRED, invalid CAPTCHA returns 403, and anonymous direct table access remains denied. Rotation creation/update and wrong-owner denial passed in a rolled-back transaction. No test notes remain. A successful real visitor CAPTCHA/post still needs verification on the published website.
+- Supabase security advisors have no warnings or errors. The informational “RLS enabled, no policy” notice is intentional: all table access goes through the server function. Execution of the dashboard-generated `rls_auto_enable()` helper is revoked from public client roles.
+
+The following steps document setup for a fresh project or credential replacement:
+
+1. For a new installation, run `supabase/schema.sql` once in that project's SQL editor. It creates the table and a service-role-only posting function. All public table access is revoked and RLS is enabled.
+   If you already installed the original finite-board schema, run `supabase/expand-board.sql` instead to widen the coordinate constraints without changing existing notes.
+   For a board installed before creator editing, also run `supabase/enable-note-editing.sql`. Existing notes have no owner token and remain read-only; they cannot safely be claimed retroactively.
+   For a board installed before custom colors, also run `supabase/enable-custom-colors.sql` to allow six-digit hexadecimal paper colors.
+   For a board installed before mouse rotation, run `supabase/enable-note-rotation.sql` to add the angle column and update the service-only create/edit functions.
+2. Deploy `supabase/functions/notes/index.ts` and its siblings `handler.js` and `verification-session.js` as the `notes` Edge Function. Disable the gateway JWT check as specified in `supabase/config.toml`: anonymous visitors use Turnstile instead of signing in. Keep the service-role key on the server only; Supabase supplies `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to the function.
+3. Create a Cloudflare Turnstile widget for `poziel.com` (and `www.poziel.com` if used). Add `localhost` only to a development widget. Set these Edge Function secrets:
+   - `TURNSTILE_SECRET_KEY`: the widget's secret.
+   - `ALLOWED_ORIGINS`: comma-separated exact origins, such as `https://poziel.com,https://www.poziel.com`.
+   - `TURNSTILE_HOSTNAMES`: comma-separated hostnames, such as `poziel.com,www.poziel.com`.
+4. Copy `.env.example` to `.env` and supply the three public values for local builds. For GitHub Pages, add the same three names as repository Actions **variables**; the build workflow passes them to Vite. Never put the service-role key or Turnstile secret in any `VITE_` variable.
+5. Rebuild and verify a real CAPTCHA, post from one browser, and refresh in another. Confirm requests without valid tokens cannot insert, and direct anonymous table writes fail.
+
+Without all three frontend values, writing/placement remains preview-only and posting is disabled. Create post and Save changes open a centered verification modal. Successful verification automatically submits once, without a second save click. Escape or the modal X cancels verification and retains the draft; API failures also retain it for retry. No fake visitor notes are seeded. Network and CAPTCHA failures retain the draft. Notes load on entry and on Refresh (not realtime).
+
+## Creator ownership
+
+The site creates a cryptographically random 256-bit bearer token in a first-party `poziel_note_creator` cookie when posting. The cookie uses Path=/, SameSite=Strict and Secure on HTTPS, with a 400-day requested lifetime refreshed on visits. Browser retention policies may shorten that lifetime. Clearing/expiring the cookie, switching browser profiles, or moving between hostnames loses edit access; there is no account recovery. Use a consistent canonical hostname.
+
+Because the static website and Edge Function have different origins, JavaScript reads the site cookie and transmits it in `X-Note-Creator` to the notes endpoint. It cannot be HttpOnly in this static-host arrangement. Treat the cookie as a private edit credential; possession grants editing rights to its notes. The server hashes it with SHA-256; only the hash is stored. Public note responses whitelist fields, exclude ownership hashes, and compute `canEdit` from the calling browser's token. Responses are never cached.
+
+A successful CAPTCHA issues a server-signed 30-minute verification session, stored in localStorage and bound to the creator cookie and exact site origin. Requests send it in `X-Note-Verification`; the server validates its HMAC and fixed expiry before skipping CAPTCHA. Clearing the creator cookie invalidates the session, and forging a browser verification flag cannot grant access. The session is signed with a domain-separated key derived from the server-only service-role secret, so rotating that secret invalidates active sessions. The footer displays the remaining verified time. After expiry or server rejection, the verification modal returns automatically. Creation and editing both require either a valid session or a fresh server-verified CAPTCHA. PATCH accepts a note ID plus content/position fields, never a trusted permission flag. The service-role-only SQL function atomically updates only a row whose ID and creator hash match. Missing/wrong credentials fail with 403. Anonymous direct table access remains revoked. Canceling an edit never writes to the backend.
+
+## Moderation and limits
+
+Notes appear immediately after verification. The owner can inspect and delete unwanted rows in Supabase's Table Editor; no public delete endpoint exists. Text is rendered with Vue interpolation, never as HTML. The table enforces message, author, color and board-boundary limits. The server verifies the CAPTCHA hostname and action in addition to token validity.
+
+The database serializes inserts and permits at most 100 new notes per hour globally and 1,000 stored notes. This is a small personal guestbook, not an infinite board. Remove old or unwanted notes in the Table Editor when full. CAPTCHA reduces automated spam but does not moderate human-written content. No IP addresses are stored.
+
+## Verification
+
+`npm test` exercises server validation, rejected/missing/replayed CAPTCHA responses, origin checks, size limits, upstream failures, quota errors, and successful persistence, computed edit permissions, missing/wrong ownership tokens, and forged permission flags using mocked network responses. `npm run build` compiles the site. These checks do not replace the live verification in step 5 or executing the SQL against the chosen project.
+
+References: [Supabase public Edge Functions](https://supabase.com/docs/guides/functions/auth), [row-level security](https://supabase.com/docs/guides/database/postgres/row-level-security), and [Turnstile server verification](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/).
+
+
+
+
+
+
+
+
+
+

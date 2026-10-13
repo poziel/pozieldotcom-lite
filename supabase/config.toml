@@ -1,0 +1,3 @@
+[functions.notes]
+# Visitors do not sign in. POST requests are verified with Turnstile in the handler.
+verify_jwt = false
