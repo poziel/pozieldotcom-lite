@@ -1,6 +1,8 @@
 <script setup>
 import { computed, nextTick, onMounted, onBeforeUnmount, ref } from 'vue'
 import NoteCaptcha from '../components/NoteCaptcha.vue'
+import NoteActions from '../components/NoteActions.vue'
+import { sortNotes } from '../lib/note-order.js'
 import { boardConfigured, noteColors, noteRequest, verifiedUntil, clearVerification } from '../lib/notes.js'
 import { noteAppearance } from '../lib/note-colors.js'
 import { clampPosition, clampCoordinate, screenToWorld, edgeVelocity, noteWidth, clampZoom, zoomAround, gridAppearance } from '../lib/board-geometry.js'
@@ -40,6 +42,10 @@ const selected = ref(null)
 const hovered = ref(null)
 const readingNote = ref(null)
 const readerDialog = ref(null)
+const deleteDialog = ref(null)
+const deleteTarget = ref(null)
+const deleting = ref(false)
+const deleteError = ref('')
 let hoverTimer
 const dateFormatter = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })
 function postedDate(value) {
@@ -53,6 +59,42 @@ async function readNote(note, event) {
   readerDialog.value?.showModal()
 }
 function closeReader() { readerDialog.value?.close(); readingNote.value = null }
+async function editFromReader() {
+  const note = readingNote.value
+  closeReader()
+  await editNote(note)
+}
+async function requestDelete(note) {
+  if (!note?.canEdit || editing.value || posting.value || deleting.value) return
+  deleteTarget.value = note
+  deleteError.value = ''
+  await nextTick()
+  deleteDialog.value?.showModal()
+}
+function cancelDelete() {
+  if (deleting.value) return
+  deleteDialog.value?.close()
+  deleteTarget.value = null
+}
+async function confirmDelete() {
+  if (!deleteTarget.value || deleting.value) return
+  deleting.value = true
+  deleteError.value = ''
+  const id = deleteTarget.value.id
+  try {
+    await noteRequest('DELETE', { id })
+    notes.value = notes.value.filter(note => note.id !== id)
+    if (readingNote.value?.id === id) closeReader()
+    if (selected.value === id) selected.value = null
+    if (hovered.value === id) hovered.value = null
+    deleteDialog.value?.close()
+    deleteTarget.value = null
+    status.value = 'Your note has been deleted.'
+    await nextTick()
+    board.value?.focus({ preventScroll: true })
+  } catch (cause) { deleteError.value = cause.message }
+  finally { deleting.value = false }
+}
 let readerPointerStartedOutside = false
 function outsideReader(event) {
   const bounds = readerDialog.value.getBoundingClientRect()
@@ -74,7 +116,7 @@ const gesture = ref('')
 const messagesOpen = ref(false)
 const messagesButton = ref(null)
 const panelCloseButton = ref(null)
-const allNotes = computed(() => [...notes.value].reverse())
+const allNotes = computed(() => sortNotes(notes.value))
 let pointer
 let frame
 let observer
@@ -162,7 +204,7 @@ async function editNote(note) {
 async function toggleMessages() {
   messagesOpen.value = !messagesOpen.value
   await nextTick()
-  if (messagesOpen.value) panelCloseButton.value?.focus()
+  if (messagesOpen.value) { panelCloseButton.value?.focus(); await refresh() }
   else messagesButton.value?.focus()
 }
 async function closeMessages() {
@@ -210,7 +252,7 @@ function captureBoardClick(event) {
   event.stopPropagation()
 }
 function shortcutDown(event) {
-  if (event.code !== 'Space' || event.isComposing || event.target.closest('input, textarea, select, [contenteditable="true"]') || verificationDialog.value?.open || readerDialog.value?.open) return
+  if (event.code !== 'Space' || event.isComposing || event.target.closest('input, textarea, select, [contenteditable="true"]') || verificationDialog.value?.open || readerDialog.value?.open || deleteDialog.value?.open) return
   event.preventDefault()
   canvasTool.value = true
   hovered.value = null
@@ -362,7 +404,7 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
       <div v-if="!notes.length && !editing" class="board-welcome" :style="paperStyle({ x: -150, y: -110 })"><p>Good people.<br>Little paper things.</p><small>The first little hello could be yours.</small></div>
       <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-hovered': hovered === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @mouseenter="hoverNote(note)" @mouseleave="leaveNote(note)" @focus="selected = note.id" @click="selected = note.id" @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
         <span class="note-message">{{ note.message }}</span><span class="note-signature">— {{ note.author || 'a friendly stranger' }}</span>
-        <time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><button v-if="note.canEdit" class="edit-note-button" aria-label="Edit my note" title="Edit my note" :disabled="editing" @click.stop="editNote(note)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12.5 3.5 4 4M3 17l1-5L13.5 2.5a1.4 1.4 0 0 1 2 0l2 2a1.4 1.4 0 0 1 0 2L8 16l-5 1Z"/></svg></button>
+        <time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" />
       </article>
       <form v-if="editing" ref="draft" class="sticky-note draft-note" :style="paperStyle({ ...position, color, angle })" aria-label="Write your sticky note" @submit.prevent="post">
         <button type="button" class="note-close" :disabled="posting" aria-label="Close note without saving" @click="cancel"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
@@ -374,16 +416,16 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
         <button type="button" class="note-rotate" aria-label="Rotate your note. Drag to tilt, or use left and right arrow keys." :disabled="posting" @pointerdown.stop="beginGesture($event, 'rotate')" @keydown="rotateKey"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 6a6 6 0 1 0 1 7M15 2v4h-4"/></svg></button><p class="public-note">Public little hello. Keep it kind.</p>
         <p v-if="error" role="alert" class="note-error">{{ error }}</p>
       </form>
-    </section>
+    <p v-if="selected && !canvasTool && !gesture" class="selected-note-hint" role="status">Double-click a note to read it larger and upright</p></section>
     <div class="canvas-zoom" role="group" aria-label="Canvas zoom"><button aria-label="Zoom out" :disabled="zoom <= .1 || Boolean(gesture)" @click="changeZoom(zoom / 1.2)">−</button><button class="zoom-value" aria-label="Reset zoom to 100 percent" :disabled="zoom === 1" @click="changeZoom(1)">{{ Math.round(zoom * 100) }}%</button><button aria-label="Zoom in" :disabled="zoom >= 2 || Boolean(gesture)" @click="changeZoom(zoom * 1.2)">＋</button></div>
     </div><aside v-if="messagesOpen" id="all-messages" class="messages-panel" aria-labelledby="messages-title" @keydown.esc.stop="closeMessages">
-      <div class="messages-panel-heading"><div><h2 id="messages-title">All the little hellos<span>.</span></h2><p>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }} · newest first</p></div><button ref="panelCloseButton" class="panel-close" aria-label="Close notes" @click="closeMessages">×</button></div>
-      <p class="messages-panel-hint">Every note, no matter how far away. Select one to find it on the board.</p>
+      <div class="messages-panel-heading"><div><h2 id="messages-title">All the little hellos<span>.</span></h2><p>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }} · yours first, then newest</p></div><button ref="panelCloseButton" class="panel-close" aria-label="Close notes" @click="closeMessages">×</button></div>
+      <p class="messages-panel-hint">Your notes come first. Select a note to jump to its location on the board.</p>
       <div class="messages-list">
         <p v-if="loading" class="messages-empty" role="status">Gathering the little hellos…</p>
         <div v-else-if="loadError" class="messages-empty" role="alert"><p>{{ loadError }}</p><button class="text-button" @click="refresh">Try again</button></div>
         <p v-else-if="!notes.length" class="messages-empty">No notes yet.<br><span>The first little hello could be yours.</span></p>
-        <ol v-if="notes.length"><li v-for="note in allNotes" :key="note.id"><button class="message-list-note" :style="noteAppearance(note.color)" :aria-label="`Find note from ${note.author || 'a friendly stranger'} on the board`" @click="showNote(note)"><span class="message-list-text">{{ note.message }}</span><time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><span class="message-list-footer"><span>— {{ note.author || 'a friendly stranger' }}</span><span aria-hidden="true">↗</span></span></button><button v-if="note.canEdit" class="text-button" :disabled="editing" @click="editNote(note)">Edit my note</button></li></ol>
+        <ol v-if="notes.length"><li v-for="note in allNotes" :key="note.id" class="drawer-note" :style="noteAppearance(note.color)"><button class="message-list-note" :aria-label="`View note from ${note.author || 'a friendly stranger'} on the board`" @click="showNote(note)"><span v-if="note.canEdit" class="your-note-label">YOUR NOTE</span><span class="message-list-text">{{ note.message }}</span><time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><span class="message-list-footer"><span>— {{ note.author || 'a friendly stranger' }}</span></span><span class="view-on-board"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="5"/><path d="M10 1v5M10 14v5M1 10h5M14 10h5"/></svg>View on board</span></button><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" /></li></ol>
       </div>
     </aside>
     </div>
@@ -394,14 +436,6 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
     <div class="board-info"><span>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</span><i class="footer-separator" aria-hidden="true"></i><span v-if="!boardConfigured">Preview · Posting opens soon</span><span v-else-if="loadError" role="alert">{{ loadError }}</span><span v-else role="status">{{ status || 'A few words can make someone’s day.' }}</span><span v-if="verificationMinutes" class="verified-status" :title="`Verification expires in ${verificationMinutes} minutes`">✓ Verified · {{ verificationMinutes }}m</span><div class="footer-actions"><button v-if="myNotes.length" class="text-button" :disabled="!missingMyNotes.length || posting || Boolean(gesture)" @click="findMyNotes">Find My Notes</button><i v-if="myNotes.length" class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="atOrigin || Boolean(gesture)" @click="centerBoard">Back to 0, 0</button><i class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="loading || posting || !boardConfigured" @click="refresh">{{ loading ? 'Loading…' : 'Refresh' }}</button></div></div>
   </main>
   <Teleport to="body"><dialog ref="verificationDialog" class="verification-dialog" aria-labelledby="verification-title" @cancel.prevent="!posting && closeVerification()"><div class="verification-heading"><h2 id="verification-title">One quick human check</h2><button class="panel-close" aria-label="Close verification" :disabled="posting" @click="closeVerification">×</button></div><p>{{ posting ? 'Verified. Saving your note…' : 'Your note will be saved automatically after verification.' }}</p><NoteCaptcha v-if="verifying && !posting" ref="captcha" @token="verificationCompleted" /><p v-if="posting" class="verification-saving" role="status">Saving…</p></dialog></Teleport>
-  <Teleport to="body"><dialog ref="readerDialog" class="note-reader" :style="readingNote ? noteAppearance(readingNote.color) : {}" aria-labelledby="reader-title" @cancel.prevent @pointerdown="readerPointerStartedOutside = outsideReader($event)" @click="readerBackdropClick"><template v-if="readingNote"><button class="reader-close" aria-label="Close note reader" @click="closeReader"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button><h2 id="reader-title" class="sr-only">Note from {{ readingNote.author || 'a friendly stranger' }}</h2><p class="reader-message">{{ readingNote.message }}</p><p class="reader-signature">— {{ readingNote.author || 'a friendly stranger' }}</p><time v-if="postedDate(readingNote.created_at)" class="reader-date" :datetime="readingNote.created_at">Posted {{ postedDate(readingNote.created_at) }}</time></template></dialog></Teleport>
+  <Teleport to="body"><dialog ref="readerDialog" class="note-reader" :style="readingNote ? noteAppearance(readingNote.color) : {}" aria-labelledby="reader-title" @cancel.prevent @pointerdown="readerPointerStartedOutside = outsideReader($event)" @click="readerBackdropClick"><template v-if="readingNote"><button class="reader-close" aria-label="Close note reader" @click="closeReader"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button><NoteActions v-if="readingNote.canEdit" :disabled="editing || posting || deleting" @edit="editFromReader" @delete="requestDelete(readingNote)" /><h2 id="reader-title" class="sr-only">Note from {{ readingNote.author || 'a friendly stranger' }}</h2><p class="reader-message">{{ readingNote.message }}</p><p class="reader-signature">— {{ readingNote.author || 'a friendly stranger' }}</p><time v-if="postedDate(readingNote.created_at)" class="reader-date" :datetime="readingNote.created_at">Posted {{ postedDate(readingNote.created_at) }}</time></template></dialog></Teleport>
+  <Teleport to="body"><dialog ref="deleteDialog" class="delete-dialog" aria-labelledby="delete-title" @cancel.prevent="cancelDelete"><h2 id="delete-title">Delete this note?</h2><p>This will permanently remove your note from the board.</p><blockquote v-if="deleteTarget">{{ deleteTarget.message }}</blockquote><p v-if="deleteError" class="delete-error" role="alert">{{ deleteError }}</p><div class="delete-dialog-actions"><button type="button" autofocus :disabled="deleting" @click="cancelDelete">Keep note</button><button type="button" class="confirm-delete" :disabled="deleting" @click="confirmDelete">{{ deleting ? 'Deleting…' : 'Delete note' }}</button></div></dialog></Teleport>
 </template>
-
-
-
-
-
-
-
-
-

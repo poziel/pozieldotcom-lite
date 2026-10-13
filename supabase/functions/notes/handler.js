@@ -34,13 +34,13 @@ export function createHandler(config, fetcher = fetch) {
       'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Headers': 'apikey, content-type, x-note-creator, x-note-verification',
       'Access-Control-Expose-Headers': 'x-note-verification, x-note-verified-until',
-      'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     })
     const reply = (data, status = 200) => new Response(JSON.stringify(data), { status, headers })
     if (!config.url || !config.serviceKey || !config.turnstileSecret || !origins.length || !hostnames.length) return reply({ error: 'The board is not ready yet.' }, 503)
     if (!origins.includes(origin)) return reply({ error: 'Origin not allowed.' }, 403)
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers })
-    if (!['GET', 'POST', 'PATCH'].includes(request.method)) return reply({ error: 'Method not allowed.' }, 405)
+    if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(request.method)) return reply({ error: 'Method not allowed.' }, 405)
     const dbHeaders = { apikey: config.serviceKey, Authorization: `Bearer ${config.serviceKey}`, 'Content-Type': 'application/json' }
     try {
       const creatorHash = await hashCreator(request.headers.get('X-Note-Creator'))
@@ -74,6 +74,20 @@ export function createHandler(config, fetcher = fetch) {
       let body
       try { body = JSON.parse(new TextDecoder().decode(bytes)) }
       catch { return reply({ error: 'Invalid note.' }, 400) }
+      if (request.method === 'DELETE') {
+        if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(body?.id || '')) return reply({ error: 'Invalid note ID.' }, 400)
+        const response = await fetcher(`${config.url}/rest/v1/rpc/delete_visitor_note`, {
+          method: 'POST', headers: dbHeaders, signal: AbortSignal.timeout(10000),
+          body: JSON.stringify({ note_id: body.id, owner_hash: creatorHash }),
+        })
+        const result = await response.json()
+        if (!response.ok) {
+          if (result.message?.includes('NOT_OWNER')) return reply({ error: 'This browser does not have permission to delete that note.' }, 403)
+          throw new Error('Database delete failed')
+        }
+        return reply({ id: result })
+      }
+      if (!body || typeof body !== 'object') return reply({ error: 'Invalid note.' }, 400)
       if (!session && !body.token) return reply({ error: 'Please verify again to save your note.', code: 'VERIFICATION_REQUIRED' }, 403)
       if (!validNote(body, !session)) return reply({ error: 'Check your note, its position, and the verification.' }, 400)
       if (!verificationSecret) return reply({ error: 'Verification is not configured for this preview.' }, 503)

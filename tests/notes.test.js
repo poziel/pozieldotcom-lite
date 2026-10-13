@@ -162,3 +162,32 @@ test('rotation accepts bounded numeric angles only', () => {
   for (const angle of [-180, -25.5, 0, 27.9, 180]) assert.ok(validNote({ ...note, angle }))
   for (const angle of [-181, 181, NaN, Infinity, '10', null]) assert.ok(!validNote({ ...note, angle }))
 })
+
+test('deletion derives ownership server-side and does not trust flags or body hashes', async () => {
+  const id = '11111111-1111-4111-8111-111111111111'
+  const makeRequest = token => new Request('https://example.com', { method: 'DELETE', headers: { Origin: config.origins, 'Content-Type': 'application/json', ...(token ? { 'X-Note-Creator': token } : {}) }, body: JSON.stringify({ id, canEdit: true, creator_hash: ownerHash }) })
+  let calls = 0
+  const handler = createHandler(config, async (url, init) => {
+    calls++
+    assert.ok(url.endsWith('/rpc/delete_visitor_note'))
+    const args = JSON.parse(init.body)
+    assert.equal(args.note_id, id)
+    assert.deepEqual(Object.keys(args).sort(), ['note_id', 'owner_hash'])
+    return args.owner_hash === ownerHash ? Response.json(id) : Response.json({ message: 'NOT_OWNER' }, { status: 400 })
+  })
+  assert.equal((await handler(makeRequest(''))).status, 403)
+  assert.equal(calls, 0)
+  assert.equal((await handler(makeRequest('b'.repeat(64)))).status, 403)
+  const success = await handler(makeRequest(ownerToken))
+  assert.equal(success.status, 200)
+  assert.deepEqual(await success.json(), { id })
+  assert.equal(calls, 2)
+})
+test('deletion rejects invalid IDs and safely reports backend failures', async () => {
+  const makeRequest = id => new Request('https://example.com', { method: 'DELETE', headers: { Origin: config.origins, 'Content-Type': 'application/json', 'X-Note-Creator': ownerToken }, body: JSON.stringify({ id }) })
+  const handler = createHandler(config, async () => { throw new Error('Private database error') })
+  assert.equal((await handler(makeRequest('not-a-note'))).status, 400)
+  const response = await handler(makeRequest('11111111-1111-4111-8111-111111111111'))
+  assert.equal(response.status, 503)
+  assert.ok(!(await response.text()).includes('Private'))
+})

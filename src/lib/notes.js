@@ -13,7 +13,7 @@ export const boardConfigured = Boolean(endpoint && key && siteKey)
 export async function noteRequest(method = 'GET', payload) {
   const creator = creatorToken(method === 'POST')
   const session = creator ? getVerification() : null
-  if (method === 'PATCH' && !creator) throw new Error('The cookie for this note is missing. You can no longer edit it in this browser.')
+  if (['PATCH', 'DELETE'].includes(method) && !creator) throw new Error('The cookie for this note is missing. You can no longer change it in this browser.')
   const response = await fetch(`${endpoint}/functions/v1/notes`, {
     method,
     headers: { apikey: key, 'Content-Type': 'application/json', ...(creator ? { 'X-Note-Creator': creator } : {}), ...(session ? { 'X-Note-Verification': session.token } : {}) },
