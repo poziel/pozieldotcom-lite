@@ -11,4 +11,4 @@ A short introduction, a collection of personal projects, and links to my social 
 
 This lightweight site is a temporary home for poziel.com while the full website is being built.
 
-The visitor sticky-note board lives at `/#/notes`. See [note board setup](docs/note-board.md) for Supabase storage, CAPTCHA configuration, and moderation.
+The visitor sticky-note board lives at `/notes`. See [note board setup](docs/note-board.md) for Supabase storage, CAPTCHA configuration, and moderation.

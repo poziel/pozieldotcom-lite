@@ -47,21 +47,50 @@ const deleteTarget = ref(null)
 const deleting = ref(false)
 const deleteError = ref('')
 let hoverTimer
+let readerAnimation
+let readerClosing = false
+const noteElement = note => board.value?.querySelector(`[data-note-id="${CSS.escape(note.id)}"]`)
+function readerOrigin(note) {
+  const source = noteElement(note)
+  if (!source) return null
+  const sourceBounds = source.getBoundingClientRect()
+  const destination = readerDialog.value.getBoundingClientRect()
+  return `translate(${sourceBounds.left + sourceBounds.width / 2 - destination.left - destination.width / 2}px, ${sourceBounds.top + sourceBounds.height / 2 - destination.top - destination.height / 2}px) rotate(${note.angle || 0}deg) scale(${source.offsetWidth * zoom.value / destination.width}, ${source.offsetHeight * zoom.value / destination.height})`
+}
 const dateFormatter = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })
 function postedDate(value) {
   const date = new Date(value)
   return value && Number.isFinite(date.getTime()) ? dateFormatter.format(date) : ''
 }
 async function readNote(note, event) {
-  if (canvasTool.value || gesture.value || event?.target.closest('button, input, textarea')) return
+  if (readingNote.value || readerClosing || canvasTool.value || gesture.value || event?.target.closest('button, input, textarea')) return
   readingNote.value = note
   await nextTick()
   readerDialog.value?.showModal()
+  const origin = readerOrigin(note)
+  if (origin && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    readerAnimation = readerDialog.value.animate([{ transform: origin }, { transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.75,.25,1)' })
+  }
 }
-function closeReader() { readerDialog.value?.close(); readingNote.value = null }
+async function closeReader(animate = true) {
+  if (!readingNote.value || readerClosing) return
+  readerClosing = true
+  const note = readingNote.value
+  readerAnimation?.cancel()
+  const origin = readerOrigin(note)
+  if (animate && origin && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    readerAnimation = readerDialog.value.animate([{ transform: 'none' }, { transform: origin }], { duration: 180, easing: 'ease-in-out' })
+    await readerAnimation.finished.catch(() => {})
+  }
+  readerDialog.value?.close()
+  readingNote.value = null
+  readerClosing = false
+  await nextTick()
+  noteElement(note)?.focus({ preventScroll: true })
+}
 async function editFromReader() {
   const note = readingNote.value
-  closeReader()
+  await closeReader(false)
   await editNote(note)
 }
 async function requestDelete(note) {
@@ -84,7 +113,7 @@ async function confirmDelete() {
   try {
     await noteRequest('DELETE', { id })
     notes.value = notes.value.filter(note => note.id !== id)
-    if (readingNote.value?.id === id) closeReader()
+    if (readingNote.value?.id === id) await closeReader(false)
     if (selected.value === id) selected.value = null
     if (hovered.value === id) hovered.value = null
     deleteDialog.value?.close()
@@ -395,14 +424,14 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
     <header class="board-header">
       <RouterLink class="board-back" to="/" aria-label="Go back to home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9" /></svg><span>Go back</span></RouterLink>
       <div class="board-heading"><h1>The little note board<span>.</span></h1><p>A hello, a thought, a terrible joke. Make yourself at home.</p></div>
-      <div class="board-header-actions"><button ref="messagesButton" class="messages-button" :aria-expanded="messagesOpen" aria-controls="all-messages" @click="toggleMessages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>All notes</span><span class="messages-count">{{ notes.length }}</span></button><button ref="addButton" class="board-button" :disabled="editing" @click="startNote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9M14 3v7h7M14 3l7 7M7 14h7M7 17h4"/></svg><span>Leave me a note</span></button></div>
+      <div class="board-header-actions"><button ref="messagesButton" class="messages-button" :aria-expanded="messagesOpen" aria-controls="all-messages" @click="toggleMessages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>All notes</span></button><button ref="addButton" class="board-button" :disabled="editing" @click="startNote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9M14 3v7h7M14 3l7 7M7 14h7M7 17h4"/></svg><span>Leave me a note</span></button></div>
     </header>
     <div class="board-stage"><div class="canvas-surface">
     <section ref="board" class="board-viewport" :class="{ 'is-panning': gesture === 'pan', 'canvas-tool-active': canvasTool, 'is-dragging-note': gesture === 'note' }" :style="gridStyle" tabindex="0" aria-label="Note board. Drag the background or use arrow keys to explore in any direction."
       @click.capture="captureBoardClick" @pointerdown.capture="captureCanvasTool" @pointerdown="beginGesture($event, 'pan')" @pointermove="movePointer" @pointerup="stopGesture" @pointercancel="stopGesture" @lostpointercapture="stopGesture" @wheel="wheel" @keydown.self="moveKey($event, 'pan')">
       <div class="world-origin" :style="paperStyle({ x: 0, y: 0 })" aria-hidden="true"></div>
       <div v-if="!notes.length && !editing" class="board-welcome" :style="paperStyle({ x: -150, y: -110 })"><p>Good people.<br>Little paper things.</p><small>The first little hello could be yours.</small></div>
-      <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-hovered': hovered === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @mouseenter="hoverNote(note)" @mouseleave="leaveNote(note)" @focus="selected = note.id" @click="selected = note.id" @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
+      <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-hovered': hovered === note.id, 'is-reading': readingNote?.id === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @mouseenter="hoverNote(note)" @mouseleave="leaveNote(note)" @focus="selected = note.id" @click="selected = note.id" @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
         <span class="note-message">{{ note.message }}</span><span class="note-signature">— {{ note.author || 'a friendly stranger' }}</span>
         <time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" />
       </article>
@@ -416,7 +445,7 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
         <button type="button" class="note-rotate" aria-label="Rotate your note. Drag to tilt, or use left and right arrow keys." :disabled="posting" @pointerdown.stop="beginGesture($event, 'rotate')" @keydown="rotateKey"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 6a6 6 0 1 0 1 7M15 2v4h-4"/></svg></button><p class="public-note">Public little hello. Keep it kind.</p>
         <p v-if="error" role="alert" class="note-error">{{ error }}</p>
       </form>
-    <p v-if="selected && !canvasTool && !gesture" class="selected-note-hint" role="status">Double-click a note to read it larger and upright</p></section>
+    </section>
     <div class="canvas-zoom" role="group" aria-label="Canvas zoom"><button aria-label="Zoom out" :disabled="zoom <= .1 || Boolean(gesture)" @click="changeZoom(zoom / 1.2)">−</button><button class="zoom-value" aria-label="Reset zoom to 100 percent" :disabled="zoom === 1" @click="changeZoom(1)">{{ Math.round(zoom * 100) }}%</button><button aria-label="Zoom in" :disabled="zoom >= 2 || Boolean(gesture)" @click="changeZoom(zoom * 1.2)">＋</button></div>
     </div><aside v-if="messagesOpen" id="all-messages" class="messages-panel" aria-labelledby="messages-title" @keydown.esc.stop="closeMessages">
       <div class="messages-panel-heading"><div><h2 id="messages-title">All the little hellos<span>.</span></h2><p>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }} · yours first, then newest</p></div><button ref="panelCloseButton" class="panel-close" aria-label="Close notes" @click="closeMessages">×</button></div>
@@ -425,12 +454,12 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
         <p v-if="loading" class="messages-empty" role="status">Gathering the little hellos…</p>
         <div v-else-if="loadError" class="messages-empty" role="alert"><p>{{ loadError }}</p><button class="text-button" @click="refresh">Try again</button></div>
         <p v-else-if="!notes.length" class="messages-empty">No notes yet.<br><span>The first little hello could be yours.</span></p>
-        <ol v-if="notes.length"><li v-for="note in allNotes" :key="note.id" class="drawer-note" :style="noteAppearance(note.color)"><button class="message-list-note" :aria-label="`View note from ${note.author || 'a friendly stranger'} on the board`" @click="showNote(note)"><span v-if="note.canEdit" class="your-note-label">YOUR NOTE</span><span class="message-list-text">{{ note.message }}</span><time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><span class="message-list-footer"><span>— {{ note.author || 'a friendly stranger' }}</span></span><span class="view-on-board"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="5"/><path d="M10 1v5M10 14v5M1 10h5M14 10h5"/></svg>View on board</span></button><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" /></li></ol>
+        <ol v-if="notes.length"><li v-for="note in allNotes" :key="note.id" class="drawer-note" :class="{ 'is-owned': note.canEdit }" :style="noteAppearance(note.color)"><button class="message-list-note" :aria-label="`View note from ${note.author || 'a friendly stranger'} on the board`" @click="showNote(note)"><span v-if="note.canEdit" class="your-note-label">YOUR NOTE</span><span class="message-list-text">{{ note.message }}</span><time v-if="postedDate(note.created_at)" class="note-posted-date" :datetime="note.created_at">{{ postedDate(note.created_at) }}</time><span class="message-list-footer"><span>— {{ note.author || 'a friendly stranger' }}</span></span><span class="drawer-nav-indicator" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 15 15 5M6 5h9v9"/></svg></span></button><NoteActions v-if="note.canEdit" :disabled="editing || posting || deleting" @edit="editNote(note)" @delete="requestDelete(note)" /></li></ol>
       </div>
     </aside>
     </div>
     <div class="board-bottom-bar">
-      <p class="board-hint"><template v-if="canvasTool">Canvas move tool active</template><template v-else-if="gesture === 'note'">Hold near an edge to keep exploring.</template><template v-else><span>Drag the board to explore</span><i class="footer-separator" aria-hidden="true"></i><span>Drag a note to place it</span><i class="footer-separator" aria-hidden="true"></i><span>Hold Space to pan</span></template></p>
+      <p class="board-hint"><template v-if="canvasTool">Canvas move tool active</template><template v-else-if="gesture === 'note'">Hold near an edge to keep exploring.</template><template v-else><span>Drag the board to explore</span><i class="footer-separator" aria-hidden="true"></i><span>Drag a note to place it</span><i class="footer-separator" aria-hidden="true"></i><span>Hold Space to pan</span><i class="footer-separator" aria-hidden="true"></i><span>Double-click a note to read</span></template></p>
       <span class="camera-position">{{ Math.round(camera.x) }}, {{ Math.round(camera.y) }}</span>
     </div>
     <div class="board-info"><span>{{ notes.length }} {{ notes.length === 1 ? 'note' : 'notes' }}</span><i class="footer-separator" aria-hidden="true"></i><span v-if="!boardConfigured">Preview · Posting opens soon</span><span v-else-if="loadError" role="alert">{{ loadError }}</span><span v-else role="status">{{ status || 'A few words can make someone’s day.' }}</span><span v-if="verificationMinutes" class="verified-status" :title="`Verification expires in ${verificationMinutes} minutes`">✓ Verified · {{ verificationMinutes }}m</span><div class="footer-actions"><button v-if="myNotes.length" class="text-button" :disabled="!missingMyNotes.length || posting || Boolean(gesture)" @click="findMyNotes">Find My Notes</button><i v-if="myNotes.length" class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="atOrigin || Boolean(gesture)" @click="centerBoard">Back to 0, 0</button><i class="footer-separator" aria-hidden="true"></i><button class="text-button" :disabled="loading || posting || !boardConfigured" @click="refresh">{{ loading ? 'Loading…' : 'Refresh' }}</button></div></div>

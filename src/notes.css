@@ -64,7 +64,6 @@
 .board-back:hover, .messages-button:hover { background: #37303e; }
 .board-back svg, .messages-button svg { width: 17px; height: 17px; flex: none; }
 .board-header-actions { display: flex; align-items: center; gap: 10px; }
-.messages-count { color: #c5a2f3; font-size: 10px; }
 .board-stage { position: relative; display: flex; gap: 14px; flex: 1; min-height: 0; }
 .world-origin { z-index: 0; width: 64px; height: 64px; transform: translate(-50%, -50%); border: 1px solid #c5a2f318; border-radius: 50%; background: transparent; }
 .world-origin::before, .world-origin::after { content: ''; position: absolute; background: #c5a2f328; left: 50%; top: 50%; transform: translate(-50%, -50%); }
@@ -230,9 +229,6 @@
 .drawer-note { position: relative; color: var(--note-ink); }
 .drawer-note .message-list-note { padding-top: 40px; }
 .your-note-label { position: absolute; top: 12px; left: 18px; font-size: 8px; letter-spacing: .1em; opacity: .75; }
-.view-on-board { display: flex; align-items: center; gap: 7px; margin-top: 16px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--note-ink) 25%, transparent); font-size: 11px; font-weight: 650; }
-.view-on-board svg { width: 15px; height: 15px; }
-.message-list-note:hover .view-on-board { text-decoration: underline; text-underline-offset: 3px; }
 .delete-dialog { margin: auto; width: min(400px, calc(100vw - 32px)); padding: 26px; border: 1px solid #665175; border-radius: 12px; background: #211c28; color: #f1eaf7; box-shadow: 0 20px 80px #0008; }
 .delete-dialog::backdrop { background: #100c17b8; backdrop-filter: blur(4px); }
 .delete-dialog h2 { font-size: 21px; font-weight: 650; }
@@ -244,4 +240,12 @@
 .delete-dialog button:disabled { opacity: .45; cursor: not-allowed; }
 .delete-dialog button:focus-visible { outline: 2px solid #c5a2f3; outline-offset: 3px; }
 .delete-dialog .delete-error { color: #ffc3c3; }
-.selected-note-hint { position: absolute; z-index: 5; top: 14px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); padding: 8px 12px; border: 1px solid #665175; border-radius: 5px; background: #211c28ed; color: #dbc5e9; font-size: 11px; text-align: center; pointer-events: none; }
+/* Drawer spacing is reserved only for owner controls. */
+.drawer-note .message-list-note { padding: 18px 28px 18px 18px; }
+.drawer-note.is-owned .message-list-note { padding-top: 40px; }
+.drawer-nav-indicator { position: absolute; right: 10px; bottom: 12px; opacity: 0; transform: translate(-3px, 3px); transition: opacity 120ms ease, transform 120ms ease; pointer-events: none; }
+.drawer-nav-indicator svg { width: 15px; height: 15px; }
+.message-list-note:hover .drawer-nav-indicator, .message-list-note:focus-visible .drawer-nav-indicator { opacity: .8; transform: none; }
+.board-viewport .posted-note.is-reading { visibility: hidden; }
+.note-reader { transform-origin: center; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .drawer-nav-indicator { transition: none; } }
