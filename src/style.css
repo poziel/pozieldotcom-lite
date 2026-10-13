@@ -102,6 +102,7 @@ footer { padding: 28px 0 32px; color: #a1a2a4; font-size: 10px; }
   .profile-logo { width: 44px; height: 44px; }
 }
 @media (min-width: 761px) {
+  .profile-card > .leave-note-link { margin: 12px 10px 10px; }
   .profile-column.is-sticky { position: sticky; }
 }
 @media (max-width: 760px) {
@@ -110,6 +111,7 @@ footer { padding: 28px 0 32px; color: #a1a2a4; font-size: 10px; }
   .profile-column { margin-top: 40px; }
   .profile-card { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); column-gap: 18px; padding: 16px; }
   .portrait { align-self: start; }
+  .profile-card > .leave-note-link { grid-column: 1 / -1; margin-top: 16px; }
   .profile-details { padding: 2px 0 0; }
   .profile-brand { gap: 6px; }
   .profile-logo { width: 28px; height: 28px; }

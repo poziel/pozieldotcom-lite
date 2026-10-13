@@ -59,4 +59,6 @@ Vue uses history routing with canonical `/` and `/notes` paths. Old `/#/notes` b
 
 Mobile layout places Go back, All notes, and Leave me a note in one action row below the title. The count, status text, and coordinates share the footer summary row; long status text truncates to preserve navigation space.
 
+Touch gestures capture on the board from contact start, ignoring child capture transfers so dragging across saved note text stays fluid. Two fingers pinch to zoom around their midpoint and can move the canvas at the same time; lifting one finger resumes panning with the remaining finger. Saved note text does not claim native touch scrolling; open the upright reader to read longer notes. The home-page note link spans the full profile card width beneath the image and details on mobile.
+
 Drafts always render above saved notes, including selected and lifting cards. An icon-only Save note action sits beside the close icon in the adhesive strip for both creating and editing; it retains validation and automatic saving after verification.

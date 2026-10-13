@@ -253,6 +253,7 @@
 @media (prefers-reduced-motion: reduce) { .drawer-nav-indicator { transition: none; } }
 /* Card selection and panning share a pointer threshold; selection remains in front. */
 .posted-note { user-select: none; -webkit-touch-callout: none; }
+.posted-note .note-message { touch-action: none; }
 .board-viewport .posted-note.is-selected:hover { z-index: 4; }
 .board-viewport.is-panning .posted-note.is-selected, .board-viewport.canvas-tool-active .posted-note.is-selected { z-index: 4; }
 .board-info { position: relative; }

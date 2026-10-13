@@ -146,6 +146,8 @@ const messagesButton = ref(null)
 const panelCloseButton = ref(null)
 const allNotes = computed(() => sortNotes(notes.value))
 let pointer
+const touches = new Map()
+let pinch
 let frame
 let observer
 let lastTime = 0
@@ -255,9 +257,23 @@ function localPoint(event) {
   return { x: event.clientX - rect.left, y: event.clientY - rect.top }
 }
 function beginGesture(event, mode) {
-  if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0) || (mode === 'note' && posting.value)) return
+  if ((!event.isPrimary && event.pointerType !== 'touch') || (event.pointerType === 'mouse' && event.button !== 0) || (mode === 'note' && posting.value)) return
   if (mode === 'pan' && !canvasTool.value && event.target.closest('button, input, textarea, .draft-note')) return
   clearTimeout(longPressTimer)
+  if (event.pointerType === 'touch' && mode === 'pan') {
+    touches.set(event.pointerId, localPoint(event))
+    board.value.setPointerCapture(event.pointerId)
+    if (touches.size >= 2) {
+      cancelAnimationFrame(frame)
+      lifting.value = null
+      suppressBoardClick = true
+      gesture.value = 'pinch'
+      const [a, b] = [...touches.values()]
+      const midpoint = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+      pinch = { distance: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), zoom: zoom.value, world: screenToWorld(midpoint, camera.value, viewport.value, zoom.value) }
+      return
+    }
+  }
   const pendingPan = mode === 'pan' && !canvasTool.value
   if (!pendingPan) { event.preventDefault(); lifting.value = null }
   const point = localPoint(event)
@@ -316,6 +332,15 @@ function updateNote() {
   position.value = clampPosition(world.x - pointer.offset.x, world.y - pointer.offset.y)
 }
 function movePointer(event) {
+  if (touches.has(event.pointerId)) touches.set(event.pointerId, localPoint(event))
+  if (gesture.value === 'pinch' && pinch) {
+    const [a, b] = [...touches.values()]
+    if (!a || !b) return
+    const next = clampZoom(pinch.zoom * Math.hypot(a.x - b.x, a.y - b.y) / pinch.distance)
+    zoom.value = next
+    setCamera(pinch.world.x - ((a.x + b.x) / 2 - viewport.value.width / 2) / next, pinch.world.y - ((a.y + b.y) / 2 - viewport.value.height / 2) / next)
+    return
+  }
   if (!pointer || event.pointerId !== pointer.id) return
   pointer.point = localPoint(event)
   if (gesture.value === 'pending-pan') {
@@ -344,13 +369,36 @@ function autoPan(time) {
   frame = requestAnimationFrame(autoPan)
 }
 function stopGesture(event) {
+  if (event?.pointerId !== undefined && gesture.value === 'pinch') {
+    if (!touches.has(event.pointerId)) return
+    touches.delete(event.pointerId)
+    if (board.value?.hasPointerCapture(event.pointerId)) board.value.releasePointerCapture(event.pointerId)
+    const remaining = [...touches.entries()][0]
+    if (remaining) {
+      const [id, point] = remaining
+      pointer = { id, target: board.value, point, previous: point, start: point, pointerType: 'touch' }
+      pinch = null
+      gesture.value = 'pan'
+      return
+    }
+  }
   if (event?.pointerId !== undefined && pointer && event.pointerId !== pointer.id) return
   const previous = pointer
   clearTimeout(longPressTimer)
   pointer = null
   gesture.value = ''
+  pinch = null
+  const capturedTouches = [...touches.keys()]
+  touches.clear()
   cancelAnimationFrame(frame)
   if (previous?.target.hasPointerCapture(previous.id)) previous.target.releasePointerCapture(previous.id)
+  for (const id of capturedTouches) if (board.value?.hasPointerCapture(id)) board.value.releasePointerCapture(id)
+}
+function lostCapture(event) {
+  // Ignore implicit capture leaving a child when capture transfers to the board.
+  const target = gesture.value === 'pinch' ? board.value : pointer?.target
+  if (event.target !== target || target?.hasPointerCapture(event.pointerId)) return
+  stopGesture(event)
 }
 function changeZoom(value, point = { x: viewport.value.width / 2, y: viewport.value.height / 2 }) {
   if (gesture.value) return
@@ -454,7 +502,7 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
     </header>
     <div class="board-stage"><div class="canvas-surface">
     <section ref="board" class="board-viewport" :class="{ 'is-panning': gesture === 'pan', 'canvas-tool-active': canvasTool, 'is-dragging-note': gesture === 'note' }" :style="gridStyle" tabindex="0" aria-label="Note board. Drag the background or use arrow keys to explore in any direction."
-      @click.capture="captureBoardClick" @pointerdown.capture="captureCanvasTool" @pointerdown="beginGesture($event, 'pan')" @pointermove="movePointer" @pointerup="stopGesture" @pointercancel="stopGesture" @lostpointercapture="stopGesture" @wheel="wheel" @keydown.self="moveKey($event, 'pan')">
+      @click.capture="captureBoardClick" @pointerdown.capture="captureCanvasTool" @pointerdown="beginGesture($event, 'pan')" @pointermove="movePointer" @pointerup="stopGesture" @pointercancel="stopGesture" @lostpointercapture="lostCapture" @wheel="wheel" @keydown.self="moveKey($event, 'pan')">
       <div class="world-origin" :style="paperStyle({ x: 0, y: 0 })" aria-hidden="true"></div>
       <div v-if="!notes.length && !editing" class="board-welcome" :style="paperStyle({ x: -150, y: -110 })"><p>Good people.<br>Little paper things.</p><small>The first little hello could be yours.</small></div>
       <article v-for="note in visibleNotes.filter(note => note.id !== editingId)" :key="note.id" :data-note-id="note.id" tabindex="0" class="sticky-note posted-note" :class="[note.color, { 'is-selected': selected === note.id, 'is-lifting': lifting === note.id, 'is-reading': readingNote?.id === note.id }]" :style="paperStyle(note)" :aria-label="`Note from ${note.author || 'a friendly stranger'}: ${note.message}`" @click="selectNote(note)" @contextmenu.prevent @dblclick="readNote(note, $event)" @keydown.enter.prevent="readNote(note)">
