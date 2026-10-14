@@ -1,0 +1,86 @@
+{
+  "anime": [
+    {
+      "name": "Mushoku Tensei: Jobless Reincarnation",
+      "type": "Fantasy · Isekai",
+      "years": "2021–present",
+      "seasons": 3,
+      "image": "https://cdn.hk01.com/di/media/images/dw/20200620/350966359829647361.jpeg/Knf-UOpWpBfscnnJB8rO-6ARif-utjVlkZoFOpGaBTo?v=w1920",
+      "comment": ""
+    },
+    {
+      "name": "Sword Art Online",
+      "type": "Action · Fantasy · Adventure",
+      "years": "2012–2020",
+      "seasons": 3,
+      "image": "https://images.justwatch.com/poster/199736017/s718/temporada-1.jpg",
+      "comment": ""
+    },
+    {
+      "name": "That Time I Got Reincarnated as a Slime",
+      "type": "Fantasy · Isekai",
+      "years": "2018–present",
+      "seasons": 4,
+      "image": "https://p2.bahamut.com.tw/B/2KU/85/69a3de3ec91c13a595a107bc2112jc15.JPG",
+      "comment": ""
+    },
+    {
+      "name": "Solo Leveling",
+      "type": "Action · Fantasy",
+      "years": "2024–present",
+      "seasons": 2,
+      "image": "https://image.tmdb.org/t/p/original/AsWRGggKBEjHlien9NrxWjqLur8.jpg",
+      "comment": ""
+    },
+    {
+      "name": "Demon Slayer: Kimetsu no Yaiba",
+      "type": "Action · Dark fantasy",
+      "years": "2019–2024",
+      "seasons": 4,
+      "image": "https://image.tmdb.org/t/p/original/4oy1X4QDgwxmUycIxU7T2VrQkIr.jpg",
+      "comment": ""
+    }
+  ],
+  "games": [
+    {
+      "name": "Minecraft",
+      "type": "Sandbox · Survival",
+      "releaseYear": 2011,
+      "platforms": "",
+      "image": "https://assets.games.gg/minecraft_game_cover_3440464e5b.jpeg",
+      "comment": ""
+    },
+    {
+      "name": "League of Legends",
+      "type": "MOBA",
+      "releaseYear": 2009,
+      "platforms": "",
+      "image": "https://gaming-cdn.com/images/products/9456/orig/league-of-legends-pc-spel-cover.jpg?v=1747212286",
+      "comment": ""
+    },
+    {
+      "name": "Diablo",
+      "type": "Action RPG · Franchise",
+      "releaseYear": "1997–present",
+      "platforms": "",
+      "image": "/favorites/diablo-lilith.png",
+      "comment": ""
+    },
+    {
+      "name": "The Elder Scrolls V: Skyrim",
+      "type": "Open-world RPG",
+      "releaseYear": 2011,
+      "platforms": "",
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/72850/library_600x900_2x.jpg",
+      "comment": ""
+    },
+    {
+      "name": "Clair Obscur: Expedition 33",
+      "type": "Turn-based RPG",
+      "releaseYear": 2025,
+      "platforms": "",
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1903340/library_600x900_2x.jpg",
+      "comment": ""
+    }
+  ]
+}

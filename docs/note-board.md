@@ -57,9 +57,9 @@ References: [Supabase public Edge Functions](https://supabase.com/docs/guides/fu
 
 ## Page URLs
 
-Vue uses hash routing: `/#/` for Home, `/#/notes` for Notes, `/#/about` for About, and `/#/uses` for Uses. The browser requests the root page from the server; Vue handles the route after `#`. Direct visits and refreshes need no per-page HTML entries or routing fallback. Query parameters are no longer stripped by custom startup code. Bookmarks using the temporary clean paths such as `/notes` should be updated to `/#/notes`.
+Vue uses hash routing: `/#/` for Home, `/#/notes` for Notes, `/#/about` for About, and `/#/works` for Works, and `/#/favorites` for Favorites. The browser requests the root page from the server; Vue handles the route after `#`. Direct visits and refreshes need no per-page HTML entries or routing fallback. Query parameters are no longer stripped by custom startup code. Bookmarks using the temporary clean paths such as `/notes` should be updated to `/#/notes`.
 
-Mobile layout places Go back, All notes, and Leave me a note in one action row below the title. The count, status text, and coordinates share the footer summary row; long status text truncates to preserve navigation space.
+The shared Home, About, Works, and Favorites links switch the right-side content while keeping the profile and socials mounted. On mobile, the profile stacks above the content. Notes opens separately as a full-page board through Leave me a note; Go back returns home. The footer uses four grid cells for hints, camera coordinates, status, and actions.
 
 Touch gestures capture on the board from contact start, ignoring child capture transfers so dragging across saved note text stays fluid. Two fingers pinch to zoom around their midpoint and can move the canvas at the same time; lifting one finger resumes panning with the remaining finger. Saved note text does not claim native touch scrolling; open the upright reader to read longer notes. The home-page note link spans the full profile card width beneath the image and details on mobile.
 

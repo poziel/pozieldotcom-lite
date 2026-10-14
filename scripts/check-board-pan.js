@@ -11,6 +11,7 @@ async (page) => {
  await page.setViewportSize(mobile?{width:390,height:844}:{width:1440,height:900});
  await page.reload(); await page.waitForSelector('.posted-note');
  await page.evaluate(()=>{window.panWrites=0;window.panEvents=0; new MutationObserver(ms=>window.panWrites+=ms.filter(m=>m.type==='attributes'&&m.attributeName==='style').length).observe(document.querySelector('.board-viewport'),{subtree:true,attributes:true});document.querySelector('.board-viewport').addEventListener('pointermove',()=>window.panEvents++);});
+ await page.locator('.board-viewport').scrollIntoViewIfNeeded();
  const b=await page.locator('.board-viewport').boundingBox(); const x=b.x+b.width/2,y=b.y+b.height/2;
  const before=(await cdp.send('Performance.getMetrics')).metrics;
  if(mobile) await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]}); else {await page.mouse.move(x,y);await page.mouse.down();}

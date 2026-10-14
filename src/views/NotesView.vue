@@ -495,7 +495,7 @@ onBeforeUnmount(() => { resetTools(); observer?.disconnect(); clearInterval(veri
 </script>
 
 <template>
-  <main class="notes-page">
+  <main class="notes-page" aria-label="Visitor note board">
     <header class="board-header">
       <RouterLink class="board-back" to="/" aria-label="Go back to home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9" /></svg><span>Go back</span></RouterLink>
       <div class="board-heading"><h1>The little note board<span>.</span></h1><p>A hello, a thought, a terrible joke. Make yourself at home.</p></div>

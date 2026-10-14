@@ -1,15 +1,16 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import SocialIcon from '../components/SocialIcon.vue'
 import MadeWithLoveCredit from '../components/MadeWithLoveCredit.vue'
-import ProjectList from '../components/ProjectList.vue'
-import { site, projects } from '../config/site.js'
+import { site } from '../config/site.js'
 import { socials } from '../config/socials.js'
 
 const brandMarkUrl = `${import.meta.env.BASE_URL}brand/poziel-mark.svg`
 const visibleSocials = socials.filter((social) => social.url && social.visible !== false)
-const roles = site.roles.split('.').map((role) => role.trim()).filter(Boolean)
+const route = useRoute()
+const sections = [{ label: 'Home', to: '/' }, { label: 'About', to: '/about' }, { label: 'Works', to: '/works' }, { label: 'Favorites', to: '/favorites' }]
 const profileColumn = ref(null)
 const profileFitsViewport = ref(false)
 let profileResizeObserver
@@ -42,16 +43,7 @@ function skipToContent() {
 <template>
   <a class="skip-link" href="#main" @click.prevent="skipToContent">Skip to content</a>
   <div class="page-shell mx-auto">
-    <main id="main" tabindex="-1" class="portfolio-grid grid items-start min-w-0">
-      <section class="intro" aria-labelledby="intro-title">
-        <h1 id="intro-title" class="headline"><span v-for="(role, index) in roles" :key="role" :class="{ 'role-muted': index === 1, 'role-accent': index === 2 }">{{ role }}<span class="period">.</span></span></h1>
-        <p class="intro-bio">{{ site.bio }}</p>
-        <div class="intro-page-links">
-          <RouterLink to="/about">A little about me <span aria-hidden="true">↗</span></RouterLink>
-          <RouterLink to="/uses">What I use <span aria-hidden="true">↗</span></RouterLink>
-        </div>
-      </section>
-
+    <div class="portfolio-grid grid items-start min-w-0">
       <aside ref="profileColumn" class="profile-column" :class="{ 'is-sticky': profileFitsViewport }" aria-label="About Alexandre and social profiles">
         <div class="profile-card">
           <img :src="site.portrait" :alt="`Portrait of ${site.name}`" width="1254" height="1254" fetchpriority="high" class="portrait aspect-square w-full object-cover" />
@@ -69,8 +61,7 @@ function skipToContent() {
           </div>
           <RouterLink class="leave-note-link" to="/notes">Leave me a note <span aria-hidden="true">↗</span></RouterLink>
         </div>
-        <section class="socials-section" aria-labelledby="socials-title">
-          <h2 id="socials-title" class="small-label">FIND ME ELSEWHERE</h2>
+        <section class="socials-section" aria-label="Social profiles">
           <ul class="social-list grid grid-cols-3">
             <li v-for="social in visibleSocials" :key="social.name">
               <Button as="a" :href="social.url" target="_blank" rel="noopener noreferrer" class="social-link flex flex-col items-center justify-center gap-2">
@@ -83,15 +74,13 @@ function skipToContent() {
         </section>
       </aside>
 
-      <section class="projects-section" aria-labelledby="projects-title">
-        <div class="section-title-row flex items-baseline justify-between gap-4">
-          <h2 id="projects-title">Projects</h2>
-        </div>
-        <ProjectList :projects="projects" />
-      </section>
-      <footer>
-        <MadeWithLoveCredit class="site-credit" maker-href="" />
-      </footer>
-    </main>
+      <main id="main" tabindex="-1" class="content-column min-w-0">
+        <nav class="content-tabs" aria-label="Explore the site">
+          <RouterLink v-for="section in sections" :key="section.to" :to="section.to" :aria-current="route.path === section.to ? 'page' : undefined" :class="{ 'is-current': route.path === section.to }">{{ section.label }}</RouterLink>
+        </nav>
+        <RouterView />
+        <footer class="content-footer" :class="{ 'with-separator': route.path !== '/' }"><MadeWithLoveCredit class="site-credit" maker-href="" /></footer>
+      </main>
+    </div>
   </div>
 </template>

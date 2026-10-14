@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Reflet — Reflected R</title>
+  <desc id="desc">A cobalt R carved into an ice-blue R. Sharp inner corners and parallel diagonal legs share a common baseline.</desc>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="512" x2="440" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#061332"/>
+      <stop offset="1" stop-color="#0b225e"/>
+    </linearGradient>
+    <linearGradient id="cobalt" x1="98" y1="420" x2="250" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0661ff"/>
+      <stop offset="1" stop-color="#218bff"/>
+    </linearGradient>
+    <linearGradient id="ice" x1="284" y1="430" x2="410" y2="80" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#92ceff"/>
+      <stop offset="1" stop-color="#e0f5ff"/>
+    </linearGradient>
+    <!-- The right R's inner edge follows the cobalt contour, offset by 28 units.
+         Both diagonal legs terminate at y=434 with flat, sharp-cut feet. -->
+    <path id="cobalt-r" d="M 120 78 H 184 C 220 78 244 106 244 142 V 204 C 244 231 236 244 216 260 L 192 278 L 292 434 H 120 Q 96 434 96 410 V 102 Q 96 78 120 78 Z"/>
+    <path id="ice-r" d="M 238 78 H 324 C 378 78 414 113 414 164 V 204 C 414 241 393 270 356 281 L 454 434 H 320 L 220 278 L 244 260 C 264 244 272 231 272 204 V 142 C 272 116 260 95 238 78 Z"/>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#tile)"/>
+  <g transform="translate(-12 0)">
+    <use href="#cobalt-r" fill="url(#cobalt)"/>
+    <use href="#ice-r" fill="url(#ice)"/>
+  </g>
+</svg>

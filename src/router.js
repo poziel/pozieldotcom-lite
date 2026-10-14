@@ -5,11 +5,19 @@ import HomeView from './views/HomeView.vue'
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', name: 'home', component: HomeView },
-    { path: '/about', name: 'about', component: () => import('./views/ProfilePage.vue'), props: { page: 'about' } },
-    { path: '/uses', name: 'uses', component: () => import('./views/ProfilePage.vue'), props: { page: 'uses' } },
+    {
+      path: '/', component: HomeView,
+      children: [
+        { path: '', name: 'home', component: () => import('./views/HomeContent.vue') },
+        { path: 'about', name: 'about', component: () => import('./views/ProfilePage.vue'), props: { page: 'about' } },
+        { path: 'works', name: 'works', component: () => import('./views/ProfilePage.vue'), props: { page: 'works' } },
+        { path: 'favorites', name: 'favorites', component: () => import('./views/FavoritesView.vue') },
+      ],
+    },
     { path: '/notes', name: 'notes', component: () => import('./views/NotesView.vue') },
+    { path: '/uses', redirect: '/works' },
+    { path: '/professional', redirect: '/works' },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
-  scrollBehavior: () => ({ top: 0 }),
+  scrollBehavior: () => false,
 })
