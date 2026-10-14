@@ -3,7 +3,7 @@
 // Only local browser responses are mocked; no notes are published.
 async (page) => {
  await page.route('**/functions/v1/notes', route => route.fulfill({json:Array.from({length:120},(_,i)=>({id:`fixture-${i}`,x:(i%12)*65-400,y:Math.floor(i/12)*45-220,message:'Performance fixture note '+i,author:'Preview',color:'butter',angle:0,canEdit:false}))}));
- await page.goto('http://127.0.0.1:5180/notes');
+ await page.goto('http://127.0.0.1:5180/#/notes');
  await page.waitForSelector('.posted-note');
  const cdp=await page.context().newCDPSession(page);
  await cdp.send('Performance.enable'); const results=[];
