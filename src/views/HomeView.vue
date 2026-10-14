@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import SocialIcon from '../components/SocialIcon.vue'
+import PageIntroduction from '../components/PageIntroduction.vue'
 import MadeWithLoveCredit from '../components/MadeWithLoveCredit.vue'
 import { site } from '../config/site.js'
 import { socials } from '../config/socials.js'
@@ -43,7 +44,11 @@ function skipToContent() {
 <template>
   <a class="skip-link" href="#main" @click.prevent="skipToContent">Skip to content</a>
   <div class="page-shell mx-auto">
-    <div class="portfolio-grid grid items-start min-w-0">
+    <main id="main" tabindex="-1" class="portfolio-grid grid items-start min-w-0">
+        <nav class="content-tabs" aria-label="Explore the site">
+          <RouterLink v-for="section in sections" :key="section.to" :to="section.to" :aria-current="route.path === section.to ? 'page' : undefined" :class="{ 'is-current': route.path === section.to }">{{ section.label }}</RouterLink>
+        </nav>
+      <PageIntroduction />
       <aside ref="profileColumn" class="profile-column" :class="{ 'is-sticky': profileFitsViewport }" aria-label="About Alexandre and social profiles">
         <div class="profile-card">
           <img :src="site.portrait" :alt="`Portrait of ${site.name}`" width="1254" height="1254" fetchpriority="high" class="portrait aspect-square w-full object-cover" />
@@ -74,13 +79,10 @@ function skipToContent() {
         </section>
       </aside>
 
-      <main id="main" tabindex="-1" class="content-column min-w-0">
-        <nav class="content-tabs" aria-label="Explore the site">
-          <RouterLink v-for="section in sections" :key="section.to" :to="section.to" :aria-current="route.path === section.to ? 'page' : undefined" :class="{ 'is-current': route.path === section.to }">{{ section.label }}</RouterLink>
-        </nav>
+      <div class="content-column min-w-0">
         <RouterView />
         <footer class="content-footer" :class="{ 'with-separator': route.path !== '/' }"><MadeWithLoveCredit class="site-credit" maker-href="" /></footer>
-      </main>
-    </div>
+      </div>
+    </main>
   </div>
 </template>

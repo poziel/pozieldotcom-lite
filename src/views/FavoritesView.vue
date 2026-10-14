@@ -15,8 +15,6 @@ function metadata(item, kind) {
 
 <template>
   <section class="favorites-content">
-    <h1 class="subpage-title">MY KIND<br><span>OF ESCAPE.</span></h1>
-    <p class="favorites-intro">Five anime. Five games. The ones that stay with me.</p>
     <section v-for="list in lists" :key="list.key" class="favorites-section" :aria-labelledby="`favorites-${list.key}`">
       <h2 :id="`favorites-${list.key}`">{{ list.title }}</h2>
       <ol class="favorites-list">
