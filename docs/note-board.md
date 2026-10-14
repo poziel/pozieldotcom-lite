@@ -4,6 +4,8 @@ The profile button opens `/notes`. The board fills the viewport and starts cente
 
 ## Activation
 
+Run `npm run dev` or `npm run preview` at `http://127.0.0.1:5180`. Vite uses strict port selection because the development API permits specific origins; switching to an arbitrary port causes board loading and saving to fail. If 5180 is occupied, reuse the existing project server or stop it before restarting.
+
 Configured on October 13, 2026:
 
 - Production Supabase: `pozieldotcom` (`mhzkhrmezjolkqaviluk`). Development Supabase: `pozieldotcom-dev` (`oxmjubzwwoadelzqdalo`). Both are cloud projects in Personal, Free plan, Canada Central, with separate databases.

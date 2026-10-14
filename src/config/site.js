@@ -1,6 +1,6 @@
-import localdevLogo from '../assets/projects/localdev.png'
-import refinimoLogo from '../assets/projects/refinimo.png'
-import subfolioLogo from '../assets/projects/subfolio.svg'
+import localdevLogo from '../assets/projects/localdev.svg'
+import refinimoLogo from '../assets/projects/refinimo.svg'
+import upkeepLogo from '../assets/projects/upkeep.svg'
 import prismixLogo from '../assets/projects/prismix.png'
 
 export const site = {
@@ -12,16 +12,14 @@ export const site = {
   employer: { name: 'Progi', url: 'https://progi.com/' },
   roles: 'Developer. Creator. Gamer.',
   bio: 'I try to build apps to make everyone’s lives easier. Also, I’m an unofficial professional gamer with no talent.',
-  announcement: 'I’m working on a new site.',
-  announcementDetail: 'It’ll have more about my life and what I’m up to.',
 }
 
 // url is the main destination; repository powers the GitHub link and star count.
 export const projects = [
   { name: 'localdev', category: 'Developer tools', description: 'Local projects, services, and development workflows. One command-line tool.', url: 'https://github.com/poziel/localdev', repository: 'poziel/localdev', icon: localdevLogo },
   { name: 'Refinimo', category: 'Team collaboration', description: 'Planning poker that helps teams estimate work together, in real time.', url: 'https://refinimo.com/', repository: 'poziel/refinimo', icon: refinimoLogo },
-  { name: 'Subfolio', note: 'Soon to be Upkeep', category: 'Personal finance', description: 'A clearer picture of subscriptions, recurring expenses, and what’s coming next.', url: 'https://github.com/poziel/subfolio', repository: 'poziel/subfolio', icon: subfolioLogo },
+  { name: 'Upkeep', category: 'Personal finance', description: 'A clearer picture of subscriptions, recurring expenses, and what’s coming next.', url: 'https://github.com/poziel/upkeep', repository: 'poziel/upkeep', icon: upkeepLogo },
   { name: 'KWIQ', category: 'Social gaming', description: 'Live quizzes for parties, classrooms, and communities. Everyone plays along.', url: 'https://github.com/poziel/kwiq', repository: 'poziel/kwiq', mark: 'K' },
-  { name: 'WinTool', category: 'Windows utilities', description: 'Windows utilities that download on demand and clean up after themselves.', url: 'https://github.com/poziel/wintool', repository: 'poziel/wintool', mark: 'W' },
-  { name: 'Prismix', note: 'In progress', category: 'Vue components', description: 'A customizable Vue component library I’m working on finishing.', url: 'https://github.com/poziel/prismix', repository: 'poziel/prismix', icon: prismixLogo },
+  { name: 'WinTools', category: 'Windows utilities', description: 'Windows utilities that download on demand and clean up after themselves.', url: 'https://wintools.poziel.dev', repository: 'poziel/wintool', mark: 'W' },
+  { name: 'Prismix', note: 'In progress', category: 'Vue components', description: 'A lightweight Vue 3 component library for accessible, composable, and customizable interfaces with a unified design system.', url: 'https://github.com/poziel/prismix', repository: 'poziel/prismix', icon: prismixLogo },
 ]

@@ -8,7 +8,7 @@ import { site, projects } from '../config/site.js'
 import { socials } from '../config/socials.js'
 
 const brandMarkUrl = `${import.meta.env.BASE_URL}brand/poziel-mark.svg`
-const visibleSocials = socials.filter((social) => social.url)
+const visibleSocials = socials.filter((social) => social.url && social.visible !== false)
 const roles = site.roles.split('.').map((role) => role.trim()).filter(Boolean)
 const profileColumn = ref(null)
 const profileFitsViewport = ref(false)
@@ -46,9 +46,10 @@ function skipToContent() {
       <section class="intro" aria-labelledby="intro-title">
         <h1 id="intro-title" class="headline"><span v-for="(role, index) in roles" :key="role" :class="{ 'role-muted': index === 1, 'role-accent': index === 2 }">{{ role }}<span class="period">.</span></span></h1>
         <p class="intro-bio">{{ site.bio }}</p>
-        <aside class="site-note flex items-start gap-3" aria-label="Website update">
-          <div><p>{{ site.announcement }}</p><p class="note-detail">{{ site.announcementDetail }}</p></div>
-        </aside>
+        <div class="intro-page-links">
+          <RouterLink to="/about">A little about me <span aria-hidden="true">↗</span></RouterLink>
+          <RouterLink to="/uses">What I use <span aria-hidden="true">↗</span></RouterLink>
+        </div>
       </section>
 
       <aside ref="profileColumn" class="profile-column" :class="{ 'is-sticky': profileFitsViewport }" aria-label="About Alexandre and social profiles">

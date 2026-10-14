@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="913" height="993.935304" viewBox="170 115.621766 913 993.935304" role="img" aria-labelledby="title desc">
+  <title id="title">Localdev</title>
+  <desc id="desc">Three rounded violet and pink folded modules forming an open cube around a right-facing arrow.</desc>
+  <!-- Hand-drawn vector reconstruction of localdev-logo.png. The viewBox fits
+       the artwork bounds without padding; intrinsic dimensions preserve its proportions.
+       Each module has a continuous silhouette with an overlapping folded face. -->
+  <defs>
+    <linearGradient id="top-fold" gradientUnits="userSpaceOnUse" x1="416" y1="276" x2="755" y2="543">
+      <stop stop-color="#7517ee"/>
+      <stop offset="1" stop-color="#410f9c"/>
+    </linearGradient>
+    <linearGradient id="top-face" gradientUnits="userSpaceOnUse" x1="431" y1="306" x2="1078" y2="337">
+      <stop stop-color="#8018fa"/>
+      <stop offset="0.5" stop-color="#a238fc"/>
+      <stop offset="1" stop-color="#dc53f3"/>
+    </linearGradient>
+    <linearGradient id="left-fold" gradientUnits="userSpaceOnUse" x1="396" y1="527" x2="564" y2="985">
+      <stop stop-color="#760bcd"/>
+      <stop offset="0.48" stop-color="#9f21ef"/>
+      <stop offset="1" stop-color="#df3bda"/>
+    </linearGradient>
+    <linearGradient id="left-face" gradientUnits="userSpaceOnUse" x1="205" y1="552" x2="481" y2="689">
+      <stop stop-color="#cc3af4"/>
+      <stop offset="0.52" stop-color="#b52cf5"/>
+      <stop offset="1" stop-color="#9317f5"/>
+    </linearGradient>
+    <linearGradient id="bottom-fold" gradientUnits="userSpaceOnUse" x1="655" y1="818" x2="1032" y2="567">
+      <stop stop-color="#a60089"/>
+      <stop offset="0.48" stop-color="#dd139d"/>
+      <stop offset="1" stop-color="#fc45b1"/>
+    </linearGradient>
+    <linearGradient id="bottom-face" gradientUnits="userSpaceOnUse" x1="582" y1="1008" x2="1048" y2="768">
+      <stop stop-color="#d30ab4"/>
+      <stop offset="0.42" stop-color="#f832bb"/>
+      <stop offset="1" stop-color="#f769c3"/>
+    </linearGradient>
+  </defs>
+  <!-- Upper module: its underside is exposed beneath the curling top face. -->
+  <path fill="url(#top-fold)" d="M404 264 C400 241 413 225 440 210 L588 127 C614 112 638 112 664 126 L1044 345 C1069 360 1082 383 1082 413 L1082 472 C1082 498 1070 517 1048 530 L908 605 C887 617 869 616 849 604 L436 354 C414 341 403 332 403 313 Z"/>
+  <path fill="url(#top-face)" d="M404 264 C400 241 413 225 440 210 L588 127 C614 112 638 112 664 126 L1044 345 C1069 360 1082 383 1082 413 L1082 472 C1082 498 1070 517 1048 530 L908 605 C887 617 869 616 849 604 L756 548 C735 535 723 514 713 484 C698 437 673 409 637 384 C579 347 477 304 404 264 Z"/>
+  <!-- Left module: the inset edge curls into the central opening. -->
+  <path fill="url(#left-fold)" d="M170 508 C170 478 182 452 207 437 L338 362 C358 351 374 351 394 362 L525 438 C541 447 549 460 549 482 C549 507 538 526 519 537 L451 576 C433 586 424 604 424 628 C424 649 433 663 451 674 L515 711 C539 725 549 742 549 769 L549 1009 C549 1031 540 1047 521 1054 C505 1061 490 1057 473 1047 L211 894 C184 878 170 854 170 823 Z"/>
+  <path fill="url(#left-face)" d="M170 508 C170 478 182 452 207 437 L338 362 C358 351 374 351 394 362 L525 438 C543 448 549 470 531 482 L426 546 C374 578 346 620 346 667 L346 973 L211 894 C184 878 170 854 170 823 Z"/>
+  <!-- Lower module: the darker upper lip rolls into the pink front face. -->
+  <path fill="url(#bottom-fold)" d="M570 809 C570 789 580 776 594 772 C608 766 620 776 632 781 C645 787 656 780 670 772 L1028 566 C1046 556 1062 560 1073 574 C1080 583 1083 594 1083 607 L1083 825 C1083 855 1071 879 1046 895 L694 1098 C673 1111 653 1114 632 1102 L595 1079 C578 1068 570 1052 570 1031 Z"/>
+  <path fill="url(#bottom-face)" d="M570 809 C570 789 580 776 594 772 C608 766 620 776 632 783 L666 804 C699 825 730 829 768 809 L980 689 C1027 662 1063 634 1082 596 C1083 600 1083 604 1083 607 L1083 825 C1083 855 1071 879 1046 895 L694 1098 C673 1111 653 1114 632 1102 L595 1079 C578 1068 570 1052 570 1031 Z"/>
+</svg>

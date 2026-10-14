@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="462" height="465" viewBox="14 11 462 465" fill="none">
+  <title>Refinimo poker chip</title>
+  <desc>A navy poker chip with alternating blue and white edge segments and a white inner ring with eight blue markers.</desc>
+  <defs>
+    <linearGradient id="body" x1="150" y1="20" x2="335" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#142553"/>
+      <stop offset=".5" stop-color="#07153e"/>
+      <stop offset="1" stop-color="#020b29"/>
+    </linearGradient>
+    <radialGradient id="face" cx="190" cy="148" r="285" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10214e"/>
+      <stop offset="1" stop-color="#030c2b"/>
+    </radialGradient>
+    <linearGradient id="blue" x1="245" y1="12" x2="245" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00baff"/>
+      <stop offset=".42" stop-color="#009bff"/>
+      <stop offset="1" stop-color="#0067ff"/>
+    </linearGradient>
+    <linearGradient id="ivory" x1="170" y1="60" x2="330" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset=".6" stop-color="#f4f5f7"/>
+      <stop offset="1" stop-color="#dfdfe0"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="245" y1="12" x2="245" y2="473" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c4d9ff" stop-opacity=".8"/>
+      <stop offset=".45" stop-color="#7184ac" stop-opacity=".28"/>
+      <stop offset=".78" stop-color="#06102f" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#edf2ff" stop-opacity=".65"/>
+    </linearGradient>
+  </defs>
+  <!-- Slightly lowered edge gives the chip its shallow bevel. -->
+  <circle cx="245" cy="246" r="230" fill="#030a20"/>
+  <circle cx="245" cy="242" r="230" fill="url(#body)" stroke="#01081f" stroke-width="2"/>
+  <g stroke="#020b25" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M 189.358 18.832 A 230 230 0 0 1 300.642 18.832 L 285.643 78.990 A 168 168 0 0 0 204.357 78.990 Z" fill="url(#blue)"/>
+    <path d="M 410.448 82.229 A 230 230 0 0 1 466.090 178.603 L 406.492 195.693 A 168 168 0 0 0 365.849 125.297 Z" fill="url(#ivory)"/>
+    <path d="M 466.090 305.397 A 230 230 0 0 1 410.448 401.771 L 365.849 358.703 A 168 168 0 0 0 406.492 288.307 Z" fill="url(#blue)"/>
+    <path d="M 300.642 465.168 A 230 230 0 0 1 189.358 465.168 L 204.357 405.010 A 168 168 0 0 0 285.643 405.010 Z" fill="url(#ivory)"/>
+    <path d="M 79.552 401.771 A 230 230 0 0 1 23.910 305.397 L 83.508 288.307 A 168 168 0 0 0 124.151 358.703 Z" fill="url(#blue)"/>
+    <path d="M 23.910 178.603 A 230 230 0 0 1 79.552 82.229 L 124.151 125.297 A 168 168 0 0 0 83.508 195.693 Z" fill="url(#ivory)"/>
+  </g>
+  <circle cx="245" cy="242" r="227.5" stroke="url(#rim)" stroke-width="3"/>
+  <circle cx="245" cy="242" r="222.5" stroke="#010822" stroke-width="1.2"/>
+  <path d="M 28.716 179.982 A 225 225 0 0 1 461.284 179.982" stroke="#e4f3ff" stroke-opacity=".48" stroke-width="1"/>
+  <circle cx="245" cy="242" r="169" fill="#020a26" stroke="#01051a" stroke-width="2"/>
+  <circle cx="245" cy="242" r="166.5" stroke="url(#rim)" stroke-width="1.5"/>
+  <circle cx="245" cy="242" r="154" fill="url(#ivory)" stroke="#010823" stroke-width="1.5"/>
+  <g fill="url(#blue)" stroke="#003570" stroke-width=".9">
+    <path d="M 223.567 89.499 A 154 154 0 0 1 266.433 89.499 L 264.206 105.343 A 138 138 0 0 0 225.794 105.343 Z"/>
+    <path d="M 337.680 119.010 A 154 154 0 0 1 367.990 149.320 L 355.212 158.950 A 138 138 0 0 0 328.050 131.788 Z"/>
+    <path d="M 397.501 220.567 A 154 154 0 0 1 397.501 263.433 L 381.657 261.206 A 138 138 0 0 0 381.657 222.794 Z"/>
+    <path d="M 367.990 334.680 A 154 154 0 0 1 337.680 364.990 L 328.050 352.212 A 138 138 0 0 0 355.212 325.050 Z"/>
+    <path d="M 266.433 394.501 A 154 154 0 0 1 223.567 394.501 L 225.794 378.657 A 138 138 0 0 0 264.206 378.657 Z"/>
+    <path d="M 152.320 364.990 A 154 154 0 0 1 122.010 334.680 L 134.788 325.050 A 138 138 0 0 0 161.950 352.212 Z"/>
+    <path d="M 92.499 263.433 A 154 154 0 0 1 92.499 220.567 L 108.343 222.794 A 138 138 0 0 0 108.343 261.206 Z"/>
+    <path d="M 122.010 149.320 A 154 154 0 0 1 152.320 119.010 L 161.950 131.788 A 138 138 0 0 0 134.788 158.950 Z"/>
+  </g>
+  <circle cx="245" cy="242" r="138" fill="url(#face)" stroke="#020922" stroke-width="1.5"/>
+  <circle cx="245" cy="242" r="139.2" stroke="#fff" stroke-opacity=".65" stroke-width=".8"/>
+</svg>
