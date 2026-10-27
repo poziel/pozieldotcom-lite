@@ -2,6 +2,9 @@
 
 Original assets supplied by the site owner, bundled locally by Vite:
 
+- `frame.svg`: copied from `D:\Dev\1-codes\frame\assets\frame.svg`.
+- `pixen.png`: copied from `D:\Dev\1-codes\pixen\assets\pixen-frame-x16.png` (the higher-resolution project image). GitHub returned 404 for this asset, so the owner's local repository was used.
+
 - `refinimo.svg`: copied from `D:\Dev\1-codes\refinimo\public\images\chip.svg` supplied by the owner.
 - `localdev.svg`: copied from `D:\Dev\5-tools\localdev\assets\branding\localdev-logo.svg` supplied by the owner.
 - `upkeep.svg`: existing project artwork retained from before the Subfolio-to-Upkeep rename.

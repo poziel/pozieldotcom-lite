@@ -4,6 +4,8 @@ import upkeepLogo from '../assets/projects/upkeep.svg'
 import prismixLogo from '../assets/projects/prismix.png'
 import wintoolsLogo from '../assets/projects/wintools-dark.svg'
 import refletLogo from '../assets/projects/reflet.svg'
+import frameLogo from '../assets/projects/frame.svg'
+import pixenLogo from '../assets/projects/pixen.png'
 
 export const site = {
   name: 'Alexandre Sauvé',
@@ -18,6 +20,8 @@ export const site = {
 
 // url is the main destination; repository powers the GitHub link and star count.
 export const projects = [
+  { name: 'Frame', category: 'Application framework', description: 'A Vue framework for desktop-style apps, with flexible workspaces, panels, commands, and shared controls.', url: 'https://github.com/poziel/frame', repository: 'poziel/frame', icon: frameLogo },
+  { name: 'Pixen', category: 'Pixel art & animation', description: 'A desktop pixel-art editor with animation, AI-assisted drawing, and flexible exports for games and apps.', url: 'https://github.com/poziel/pixen', repository: 'poziel/pixen', icon: pixenLogo },
   { name: 'localdev', category: 'Developer tools', description: 'Local projects, services, and development workflows. One command-line tool.', url: 'https://github.com/poziel/localdev', repository: 'poziel/localdev', icon: localdevLogo },
   { name: 'Refinimo', category: 'Team collaboration', description: 'Planning poker that helps teams estimate work together, in real time.', url: 'https://refinimo.com/', repository: 'poziel/refinimo', icon: refinimoLogo },
   { name: 'Upkeep', category: 'Personal finance', description: 'A clearer picture of subscriptions, recurring expenses, and what’s coming next.', url: 'https://github.com/poziel/upkeep', repository: 'poziel/upkeep', icon: upkeepLogo },

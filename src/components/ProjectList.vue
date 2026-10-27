@@ -1,10 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SocialIcon from './SocialIcon.vue'
 import { loadGithubStars } from '../lib/github-stars.js'
+import { sortProjectsByUpdate } from '../lib/project-order.js'
 
 const props = defineProps({ projects: { type: Array, required: true } })
 const stars = ref({})
+const sortedProjects = computed(() => sortProjectsByUpdate(props.projects, stars.value))
 const countFormat = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
 
 function starLabel(project) {
@@ -18,15 +20,17 @@ function starLabel(project) {
 onMounted(async () => {
   let storage
   try { storage = window.localStorage } catch { /* Optional cache. */ }
-  await Promise.all([...new Set(props.projects.map((project) => project.repository).filter(Boolean))].map(async (repository) => {
-    stars.value[repository] = await loadGithubStars(repository, { storage })
+  const results = await Promise.all([...new Set(props.projects.map((project) => project.repository).filter(Boolean))].map(async (repository) => {
+    return [repository, await loadGithubStars(repository, { storage })]
   }))
+  // Apply together so rows do not jump after every individual response.
+  stars.value = Object.fromEntries(results)
 })
 </script>
 
 <template>
   <ul class="project-list">
-    <li v-for="project in projects" :key="project.name" class="project-row">
+    <li v-for="project in sortedProjects" :key="project.name" class="project-row">
       <a :href="project.url" target="_blank" rel="noopener noreferrer" class="project-link grid items-start">
         <img v-if="project.icon" :src="project.icon" alt="" width="44" height="44" loading="lazy" decoding="async" class="project-icon" />
         <span v-else class="project-icon project-icon-fallback" aria-hidden="true">{{ project.mark }}</span>

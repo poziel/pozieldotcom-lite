@@ -1,4 +1,4 @@
-const cachePrefix = 'poziel:github-stars:v1:'
+const cachePrefix = 'poziel:github-stars:v2:'
 export const starCacheLifetime = 60 * 60 * 1000
 const unavailableCacheLifetime = 60 * 1000
 const empty = () => ({ count: null, updatedAt: null, stale: false })
@@ -38,6 +38,9 @@ export async function loadGithubStars(repository, {
     const data = await response.json()
     if (!validCount(data.stargazers_count)) throw new Error('Invalid star count')
     const result = { count: data.stargazers_count, updatedAt: now }
+    if (typeof data.pushed_at === 'string' && Number.isFinite(Date.parse(data.pushed_at))) {
+      result.pushedAt = data.pushed_at
+    }
     save(result)
     return { ...result, stale: false }
   } catch {

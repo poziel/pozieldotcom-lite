@@ -3,6 +3,20 @@ import assert from 'node:assert/strict'
 import { loadGithubStars, starCacheLifetime } from '../src/lib/github-stars.js'
 
 const now = 10_000_000
+test('repository push dates are cached and retained during outages', async () => {
+  const storage = cache()
+  const pushedAt = '2026-10-27T12:00:00Z'
+  const first = await loadGithubStars('poziel/frame', {
+    storage, now,
+    fetcher: async () => ({ ok: true, json: async () => ({ stargazers_count: 2, pushed_at: pushedAt }) }),
+  })
+  assert.equal(first.pushedAt, pushedAt)
+  const cached = await loadGithubStars('poziel/frame', { storage, now: now + 1, fetcher: () => { throw new Error('offline') } })
+  assert.equal(cached.pushedAt, pushedAt)
+  const stale = await loadGithubStars('poziel/frame', { storage, now: now + starCacheLifetime, fetcher: () => { throw new Error('offline') } })
+  assert.equal(stale.pushedAt, pushedAt)
+  assert.equal(stale.stale, true)
+})
 const response = (count) => ({ ok: true, json: async () => ({ stargazers_count: count }) })
 function cache(initial = null) {
   let value = initial
